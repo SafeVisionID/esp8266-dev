@@ -7,4 +7,4 @@ To install required SDK:
 - Others, follow this [guide](https://github.com/pfalcon/esp-open-sdk/blob/master/README.md)
 
 Fearture and To-Do list:
-- Basic LED Blink
+- ~~Basic LED Blink~~
