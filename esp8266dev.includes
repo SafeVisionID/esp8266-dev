@@ -1,5 +1,6 @@
 .
 user
+driver
 /opt/esp-open-sdk/ESP8266_NONOS_SDK-2.1.0-18-g61248df/include
 /opt/esp-open-sdk/ESP8266_NONOS_SDK-2.1.0-18-g61248df/driver_lib/include
 /opt/esp-open-sdk/ESP8266_NONOS_SDK-2.1.0-18-g61248df/third_party/include

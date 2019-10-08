@@ -35,7 +35,7 @@ BAUDRATE	?= 9600
 TARGET		= app
 
 # which modules (subdirectories) of the project to include in compiling
-MODULES		= user
+MODULES		= user driver
 EXTRA_INCDIR    = include
 
 # libraries used in this project, mainly provided by the SDK
