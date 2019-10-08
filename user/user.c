@@ -21,8 +21,5 @@ void ICACHE_FLASH_ATTR user_init(){
 
 	os_timer_setfn(&blinky_timer, (os_timer_func_t *)blinky_timer_handler, NULL);
   	os_timer_arm(&blinky_timer, 500, 1);
-
-  	os_timer_setfn(&serial_timer, (os_timer_func_t *)serial_timer_handler, NULL);
-  	os_timer_arm(&serial_timer, 1000, 1);
 }
 
