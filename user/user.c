@@ -17,6 +17,7 @@ void ICACHE_FLASH_ATTR print_os_printf(){
   os_printf("\r\n\r\n");
   os_printf("[INFO] -------------------------------------------\r\n");
 
+  os_printf("[INFO] Compiled at %s %s\r\n", __DATE__,__TIME__);
   os_printf("[INFO] SDK: %s\r\n", system_get_sdk_version());
   os_printf("[INFO] Chip ID: %08X\r\n", system_get_chip_id());
   os_printf("[INFO] BOOT Version: %d\r\n",system_get_boot_version());
@@ -42,6 +43,6 @@ void ICACHE_FLASH_ATTR user_init(){
 	gpio16_output_conf();
 
 	os_timer_setfn(&blinky_timer, (os_timer_func_t *)blinky_timer_handler, NULL);
-  	os_timer_arm(&blinky_timer, 500, 1);   
+    os_timer_arm(&blinky_timer, 500, 1);
 }
 
