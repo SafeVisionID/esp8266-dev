@@ -8,6 +8,7 @@ To install required SDK:
 
 Fearture and To-Do list:
 - ~~Basic LED Blink~~
+- ~~UART Boot Info~~
 - UART Shell and Response/Callback
 - Wifi AP mode
 - Wifi Station mode
