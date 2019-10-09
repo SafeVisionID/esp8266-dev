@@ -1,9 +1,10 @@
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
-#include "driver/gpio16.h"
 #include "os_type.h"
 #include "user_config.h"
+#include "driver/uart.h"
+#include "driver/gpio16.h"
 
 #include "blinky.h"
 
@@ -35,7 +36,8 @@ void ICACHE_FLASH_ATTR print_os_printf(){
 }
 
 void ICACHE_FLASH_ATTR user_init(){
-	uart_init(SERIALBAUD, SERIALBAUD);
+    uart_init(SERIALBAUD,SERIALBAUD);
+    uart_rx_intr_enable(UART0);
     print_os_printf();
 
 	gpio_init();

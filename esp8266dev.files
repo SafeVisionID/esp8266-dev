@@ -1,4 +1,7 @@
 Makefile
+driver/gpio16.c
+driver/uart.c
+driver/user_config.h
 user/blinky.c
 user/blinky.h
 user/user.c

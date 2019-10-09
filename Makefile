@@ -35,11 +35,11 @@ BAUDRATE	?= 9600
 TARGET		= app
 
 # which modules (subdirectories) of the project to include in compiling
-MODULES		= user
+MODULES		= user driver
 EXTRA_INCDIR    = include
 
 # libraries used in this project, mainly provided by the SDK
-LIBS		= c gcc hal pp phy net80211 lwip wpa main driver
+LIBS		= c gcc hal pp phy net80211 lwip wpa main
 
 # compiler flags using during compilation of source files
 CFLAGS		= -Os -g -O2 -Wpointer-arith -Wundef -Werror -Wl,-EL -fno-inline-functions -nostdlib -mlongcalls -mtext-section-literals  -D__ets__ -DICACHE_FLASH
