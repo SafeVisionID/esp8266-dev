@@ -28,7 +28,7 @@ void ICACHE_FLASH_ATTR print_os_printf(){
   if(bootmode == 0){ os_printf("[INFO] Boot using Enhance Mode\r\n"); }
   else{os_printf("[INFO] Boot using Normal Mode\r\n");}
 
-  os_printf("[INFO] CPU Freq: %d\r\n", system_get_cpu_freq());
+  os_printf("[INFO] CPU Freq: %d MHz\r\n", system_get_cpu_freq());
   os_printf("[INFO] Memory Info:\r\n"); system_print_meminfo();
 
   os_printf("[INFO] -------------------------------------------\r\n");

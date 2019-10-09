@@ -41,7 +41,7 @@ uint8 uart_rx_send = 0;
 #define uart_recvTaskQueueLen    10
 os_event_t    uart_recvTaskQueue[uart_recvTaskQueueLen];
 
-#define DBG  
+#define DBG
 #define DBG1 uart1_sendStr_no_wait
 #define DBG2 os_printf
 
@@ -58,21 +58,21 @@ uart_config(uint8 uart_no)
         PIN_FUNC_SELECT(PERIPHS_IO_MUX_U0TXD_U, FUNC_U0TXD);
     }
     uart_div_modify(uart_no, UART_CLK_FREQ / (UartDev.baut_rate));
-    
+
     WRITE_PERI_REG(UART_CONF0(uart_no), ((UartDev.exist_parity & UART_PARITY_EN_M)  <<  UART_PARITY_EN_S)
                                                                         | ((UartDev.parity & UART_PARITY_M)  <<UART_PARITY_S )
                                                                         | ((UartDev.stop_bits & UART_STOP_BIT_NUM) << UART_STOP_BIT_NUM_S)
                                                                         | ((UartDev.data_bits & UART_BIT_NUM) << UART_BIT_NUM_S));
-    
+
     SET_PERI_REG_MASK(UART_CONF0(uart_no), UART_RXFIFO_RST | UART_TXFIFO_RST);
     CLEAR_PERI_REG_MASK(UART_CONF0(uart_no), UART_RXFIFO_RST | UART_TXFIFO_RST);
-    
+
     if (uart_no == UART0){
         WRITE_PERI_REG(UART_CONF1(uart_no),
         ((100 & UART_RXFIFO_FULL_THRHD) << UART_RXFIFO_FULL_THRHD_S) |
         (0x02 & UART_RX_TOUT_THRHD) << UART_RX_TOUT_THRHD_S |
         UART_RX_TOUT_EN|
-        ((0x10 & UART_TXFIFO_EMPTY_THRHD)<<UART_TXFIFO_EMPTY_THRHD_S));//wjl 
+        ((0x10 & UART_TXFIFO_EMPTY_THRHD)<<UART_TXFIFO_EMPTY_THRHD_S));//wjl
         SET_PERI_REG_MASK(UART_INT_ENA(uart_no), UART_RXFIFO_TOUT_INT_ENA |UART_FRM_ERR_INT_ENA);
     }else{
         WRITE_PERI_REG(UART_CONF1(uart_no),((UartDev.rcv_buff.TrigLvl & UART_RXFIFO_FULL_THRHD) << UART_RXFIFO_FULL_THRHD_S));//TrigLvl default val == 1
@@ -101,7 +101,7 @@ uart1_write_char(char c)
         uart_tx_one_char(UART1, '\r');
         uart_tx_one_char(UART1, '\n');
     }else if (c == '\r'){
-    
+
     }else{
         uart_tx_one_char(UART1, c);
     }
@@ -114,7 +114,7 @@ uart0_write_char_no_wait(char c)
         uart_tx_one_char_no_wait(UART0, '\r');
         uart_tx_one_char_no_wait(UART0, '\n');
     }else if (c == '\r'){
-    
+
     }
     else{
         uart_tx_one_char_no_wait(UART0, c);
@@ -168,7 +168,7 @@ uart0_rx_intr_handler(void *para)
         CLEAR_PERI_REG_MASK(UART_INT_ENA(UART0), UART_TXFIFO_EMPTY_INT_ENA);
 
         WRITE_PERI_REG(UART_INT_CLR(uart_no), UART_TXFIFO_EMPTY_INT_CLR);
-        
+
     }else if(UART_RXFIFO_OVF_INT_ST  == (READ_PERI_REG(UART_INT_ST(uart_no)) & UART_RXFIFO_OVF_INT_ST)){
         WRITE_PERI_REG(UART_INT_CLR(uart_no), UART_RXFIFO_OVF_INT_CLR);
         DBG1("RX OVF!!\r\n");
@@ -186,6 +186,21 @@ uart_response(uint8 inChar){
 
             if(os_strcmp(uart_rx_buffer,"test")==0){
                 uart0_sendStr("What to test?\r\n");
+            }
+            else if(os_strcmp(uart_rx_buffer,"sdk")==0){
+                os_printf("[INFO] SDK: %s\r\n", system_get_sdk_version());
+            }
+            else if(os_strcmp(uart_rx_buffer,"chip")==0){
+                os_printf("[INFO] Chip ID: %08X\r\n", system_get_chip_id());
+            }
+            else if(os_strcmp(uart_rx_buffer,"when")==0){
+                os_printf("[INFO] Compiled at %s %s\r\n", __DATE__,__TIME__);
+            }
+            else if(os_strcmp(uart_rx_buffer,"fcpu")==0){
+                os_printf("[INFO] CPU Freq: %d MHz\r\n", system_get_cpu_freq());
+            }
+            else if(os_strcmp(uart_rx_buffer,"mems")==0){
+                os_printf("[INFO] Memory Info:\r\n"); system_print_meminfo();
             }
             else{
                 os_strcat(uart_rx_buffer,"\r\n");
@@ -229,12 +244,12 @@ void ICACHE_FLASH_ATTR
 uart_init(UartBautRate uart0_br, UartBautRate uart1_br)
 {
     system_os_task(uart_recvTask, uart_recvTaskPrio, uart_recvTaskQueue, uart_recvTaskQueueLen);
-    
+
     UartDev.baut_rate = uart0_br;
     uart_config(UART0);
     UartDev.baut_rate = uart1_br;
     uart_config(UART1);
-    ETS_UART_INTR_ENABLE();    
+    ETS_UART_INTR_ENABLE();
 }
 
 void ICACHE_FLASH_ATTR
