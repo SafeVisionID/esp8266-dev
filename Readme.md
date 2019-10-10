@@ -7,27 +7,27 @@ To install required SDK:
 - Others, follow this [guide](https://github.com/pfalcon/esp-open-sdk/blob/master/README.md)
 
 Fearture and To-Do list:
-- ~~Basic LED Blink~~
-- ~~UART Boot Info~~
-- ~~UART Shell and Response/Callback~~
-- ~~Basic HTTP Server~~
-	- ~~Basic HTML Response~~
-	- ~~Serial Out Response~~
-	- Receive Serial Request
-	- Reset Request
-- ~~Wifi Station mode~~
-	- ~~Config and Save Password~~
-	- Config and Save SSID
-- Wifi SoftAP mode
-	- Config and Save Password
-	- Config and Save SSID
-- Switch Statio and SoftAP
-	- by HTTP Request
-	- by GPIO pin
-- Sensor Interface
-	- GPIO Logic
-	- ADC
-- Sleep and WakeUp
-	- by RTC/Timer
-	- by Interrupt GPIO 
-	- by Sensor Trigger
+- [x] Basic LED Blink
+- [x] UART Boot Info
+- [x] UART Shell and Response/Callback
+- [x] Basic HTTP Server
+	- [x] Basic HTML Response
+	- [x] Serial Out Response
+	- [] Receive Serial Request
+	- [] Reset Request
+- [x] Wifi Station mode
+	- [x] Config and Save Password
+	- [] Config and Save SSID
+- [] Wifi SoftAP mode
+	- [] Config and Save Password
+	- [] Config and Save SSID
+- [] Switch Statio and SoftAP
+	- [] by HTTP Request
+	- [] by GPIO pin
+- [] Sensor Interface
+	- [] GPIO Logic
+	- [] ADC
+- [] Sleep and WakeUp
+	- [] by RTC/Timer
+	- [] by Interrupt GPIO 
+	- [] by Sensor Trigger
