@@ -17,6 +17,7 @@ Fearture and To-Do list:
 	- [x] Basic HTML Response
 	- [x] Serial Out Response
 	- [x] Reset Request
+	- [ ] R/W String in Flash
 	- [ ] Receive Serial Request
 - [x] Wifi Station mode
 	- [x] Config Password
@@ -24,7 +25,7 @@ Fearture and To-Do list:
 - [x] Wifi SoftAP mode
 	- [x] Default IP, SSID, and Password
 	- [x] Config Station SSID and Password
-- [ ] Switch Station and SoftAP
+- [x] Switch Station and SoftAP
 	- [x] by HTTP Request
 	- [ ] by GPIO pin
 - [ ] Sensor Interface
