@@ -10,30 +10,24 @@
 #include "httpd.h"
 #include "wifi_sap.h"
 
-#define TEST_DHCP_LEASE 0
-
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
-#if TEST_DHCP_LEASE
+
     const char* start_ip = "192.168.5.100";
     const char* end_ip = "192.168.5.105";
     struct dhcps_lease dhcplease;
-#endif
 
     struct ip_info ipinfo;
 
     wifi_softap_dhcps_stop();
 
     IP4_ADDR(&ipinfo.ip, 192, 168, 5, 1);
-    IP4_ADDR(&ipinfo.gw, 192, 168, 5, 1);
+    IP4_ADDR(&ipinfo.gw, 192, 168, 1, 1);
     IP4_ADDR(&ipinfo.netmask, 255, 255, 255, 0);
+    wifi_set_ip_info(SOFTAP_IF,&ipinfo);
 
-#if TEST_DHCP_LEASE
     IP4_ADDR(&dhcplease.start_ip, 192, 168, 5, 100);
     IP4_ADDR(&dhcplease.end_ip, 192, 168, 5, 105);
     wifi_softap_set_dhcps_lease(&dhcplease);
-#endif
-
-    wifi_set_ip_info(SOFTAP_IF,&ipinfo);
 
     wifi_softap_dhcps_start();
 }
@@ -52,7 +46,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
     os_memcpy(softapConf.ssid,"SafeVisionID",12);
     os_memcpy(softapConf.password,"safevision",10);
 
-//    user_wifi_softap_set_ip();
+    user_wifi_softap_set_ip();
 
     wifi_softap_set_config(&softapConf);
 }
