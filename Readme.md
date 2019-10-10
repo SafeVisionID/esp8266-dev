@@ -13,21 +13,21 @@ Fearture and To-Do list:
 - [x] Basic HTTP Server
 	- [x] Basic HTML Response
 	- [x] Serial Out Response
-	- [] Receive Serial Request
-	- [] Reset Request
+	- [ ] Receive Serial Request
+	- [ ] Reset Request
 - [x] Wifi Station mode
 	- [x] Config and Save Password
-	- [] Config and Save SSID
-- [] Wifi SoftAP mode
-	- [] Config and Save Password
-	- [] Config and Save SSID
-- [] Switch Statio and SoftAP
-	- [] by HTTP Request
-	- [] by GPIO pin
-- [] Sensor Interface
-	- [] GPIO Logic
-	- [] ADC
-- [] Sleep and WakeUp
-	- [] by RTC/Timer
-	- [] by Interrupt GPIO 
-	- [] by Sensor Trigger
+	- [ ] Config and Save SSID
+- [ ] Wifi SoftAP mode
+	- [ ] Config and Save Password
+	- [ ] Config and Save SSID
+- [ ] Switch Statio and SoftAP
+	- [ ] by HTTP Request
+	- [ ] by GPIO pin
+- [ ] Sensor Interface
+	- [ ] GPIO Logic
+	- [ ] ADC
+- [ ] Sleep and WakeUp
+	- [ ] by RTC/Timer
+	- [ ] by Interrupt GPIO 
+	- [ ] by Sensor Trigger
