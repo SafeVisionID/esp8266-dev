@@ -4,6 +4,11 @@
 #include "os_type.h"
 #include "user_config.h"
 
+#include "mem.h"
+#include "ip_addr.h"
+#include "espconn.h"
+#include "user_interface.h"
+
 #include "driver/uart.h"
 #include "driver/gpio16.h"
 
@@ -11,8 +16,6 @@
 #include "httpd.h"
 #include "wifi_sap.h"
 #include "wifi_sta.h"
-
-#define USE_SOFTAP 1
 
 #define SERIALBAUD 9600
 
@@ -53,11 +56,11 @@ void ICACHE_FLASH_ATTR user_init(){
 	os_timer_setfn(&blinky_timer, (os_timer_func_t *)blinky_timer_handler, NULL);
     os_timer_arm(&blinky_timer, 500, 1);
 
-#if USE_SOFTAP
-    user_wifi_softap_init();
-#else
-    user_wifi_station_init();
-#endif
-
+    if(wifi_get_opmode_default()==0x02){
+        user_wifi_softap_init();
+    }
+    else if (wifi_get_opmode_default()==0x01) {
+        user_wifi_station_init();
+    }
 }
 

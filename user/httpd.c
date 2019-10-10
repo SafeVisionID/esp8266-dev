@@ -107,6 +107,8 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     char txthtml[200];
     char strRecv[64];
     char strReq[32];
+
+    char ssid[32];
     char password[64];
     struct station_config stationConf;
 
@@ -124,10 +126,12 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
         tcp_conf_parse(strRecv,strReq,STR_REQ);
 
         if(os_strcmp("pass",strReq)==0){
+            wifi_set_opmode_current(STATIONAP_MODE);
+
             tcp_conf_parse(strRecv,password,STR_DATA);
             os_printf("new password: %s\r\n",password);
 
-            os_sprintf(txthtml,"new password: %s\r\n",password);
+            os_sprintf(txthtml,"new password: %s",password);
             http_resp(pespconn,200,(char*)txthtml);
 
             os_memset(stationConf.password, 0, 64);
@@ -136,11 +140,57 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             wifi_station_get_config(&stationConf);
             os_memcpy(&stationConf.password, password, 64);
             wifi_station_set_config(&stationConf);
+
+            wifi_set_opmode_current(SOFTAP_MODE);
         }
-        if(os_strcmp("serial",strReq)==0){
-            uart0_sendStr("Serial Response as HTTP request\r\n");
-            os_sprintf(txthtml,"Serial Response Requested\r\n",password);
+        else if(os_strcmp("ssid",strReq)==0){
+            wifi_set_opmode_current(STATIONAP_MODE);
+
+            tcp_conf_parse(strRecv,ssid,STR_DATA);
+            os_printf("new ssid: %s\r\n",ssid);
+
+            os_sprintf(txthtml,"new ssid: %s",ssid);
             http_resp(pespconn,200,(char*)txthtml);
+
+            os_memset(stationConf.ssid, 0, 32);
+            stationConf.bssid_set = 0;
+
+            wifi_station_get_config(&stationConf);
+            os_memcpy(&stationConf.ssid, ssid, 32);
+            wifi_station_set_config(&stationConf);
+
+            wifi_set_opmode_current(SOFTAP_MODE);
+        }
+        else if(os_strcmp("infosta",strReq)==0){
+            wifi_station_get_config(&stationConf);
+
+            os_printf("Station Mode Information\r\n");
+            os_printf("SSID: %s\r\nPASS: %s\r\n",stationConf.ssid,stationConf.password);
+            os_sprintf(txthtml,"Station Mode Information with SSID: %s and PASS: %s",stationConf.ssid,stationConf.password);
+            http_resp(pespconn,200,(char*)txthtml);
+       }
+        else if(os_strcmp("infosap",strReq)==0){
+            os_printf("SoftAP Mode Information\r\n");
+            os_printf("SSID: SafeVisionID\r\nPASS: safevision\r\nURL: http://192.168.5.1:8080/\r\n");
+            os_sprintf(txthtml,"SoftAP Mode Information | SSID: SafeVisionID | PASS: safevision | URL: http://192.168.5.1:8080/");
+            http_resp(pespconn,200,(char*)txthtml);
+       }
+       else if(os_strcmp("station",strReq)==0){
+            uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+            wifi_set_opmode(STATION_MODE);
+       }
+       else if(os_strcmp("softap",strReq)==0){
+            uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+            wifi_set_opmode(SOFTAP_MODE);
+       }
+       else if(os_strcmp("serial",strReq)==0){
+            os_printf("Serial Response as HTTP request\r\n");
+            os_sprintf(txthtml,"Serial Response Requested",password);
+            http_resp(pespconn,200,(char*)txthtml);
+        }
+        else if(os_strcmp("restart",strReq)==0){
+            uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+            system_restart();
         }
         else{
             http_resp(pespconn,200,NULL);

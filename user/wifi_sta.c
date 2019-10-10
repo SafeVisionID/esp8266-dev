@@ -2,8 +2,8 @@
 #include "osapi.h"
 #include "gpio.h"
 #include "os_type.h"
-#include "ip_addr.h"
 #include "mem.h"
+#include "ip_addr.h"
 #include "espconn.h"
 #include "user_interface.h"
 
@@ -47,6 +47,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
 
     wifi_station_get_config(&stationConf);
 
+#if USE_DEFAULT_SSID_PASS
     if(os_strlen(stationConf.ssid)==0){
         os_printf("Using default ssid\r\n");
         os_strcpy(ssid,"AchmadiGamePhone");
@@ -62,6 +63,10 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
     }else{
         os_printf("Using previous password: %s\r\n",stationConf.password);
     }
+#else
+    os_printf("Using saved ssid: %s\r\n",stationConf.ssid);
+    os_printf("Using saved password: %s\r\n",stationConf.password);
+#endif
 
     wifi_station_set_config(&stationConf);
 
@@ -72,8 +77,5 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
 
 void ICACHE_FLASH_ATTR user_wifi_station_init(void){
     wifi_set_opmode(STATION_MODE);
-#if USE_MAX_POWER
-    wifi_set_phy_mode(PHY_MODE_11N);
-#endif
     user_wifi_station_conf();
 }

@@ -147,6 +147,6 @@ serial:
 	sudo $(MINICOM) -b $(BAUDRATE) -D $(ESPPORT)
 
 clean:
-	$(Q) rm -rf $(FW_BASE) $(BUILD_BASE)
+	$(Q) rm -rf $(FW_BASE) $(BUILD_BASE) *.creator.user
 
 $(foreach bdir,$(BUILD_DIR),$(eval $(call compile-objects,$(bdir))))

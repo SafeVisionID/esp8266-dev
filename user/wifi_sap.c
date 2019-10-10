@@ -2,8 +2,8 @@
 #include "osapi.h"
 #include "gpio.h"
 #include "os_type.h"
-#include "ip_addr.h"
 #include "mem.h"
+#include "ip_addr.h"
 #include "espconn.h"
 #include "user_interface.h"
 
@@ -54,9 +54,6 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
 void ICACHE_FLASH_ATTR user_wifi_softap_init(void){
     wifi_set_opmode(SOFTAP_MODE);
     user_tcpserver_init(SERVER_LOCAL_PORT);
-#if USE_MAX_POWER
-    wifi_set_phy_mode(PHY_MODE_11N);
-#endif
     user_wifi_softap_conf();
 }
 
