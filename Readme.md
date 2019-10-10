@@ -16,16 +16,16 @@ Fearture and To-Do list:
 - [x] Basic HTTP Server
 	- [x] Basic HTML Response
 	- [x] Serial Out Response
+	- [x] Reset Request
 	- [ ] Receive Serial Request
-	- [ ] Reset Request
 - [x] Wifi Station mode
-	- [x] Config and Save Password
-	- [ ] Config and Save SSID
+	- [x] Config Password
+	- [x] Config SSID
 - [x] Wifi SoftAP mode
-	- [ ] Config and Save Password
-	- [ ] Config and Save SSID
+	- [x] Default IP, SSID, and Password
+	- [x] Config Station SSID and Password
 - [ ] Switch Station and SoftAP
-	- [ ] by HTTP Request
+	- [x] by HTTP Request
 	- [ ] by GPIO pin
 - [ ] Sensor Interface
 	- [ ] GPIO Logic
