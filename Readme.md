@@ -21,10 +21,10 @@ Fearture and To-Do list:
 - [x] Wifi Station mode
 	- [x] Config and Save Password
 	- [ ] Config and Save SSID
-- [ ] Wifi SoftAP mode
+- [x] Wifi SoftAP mode
 	- [ ] Config and Save Password
 	- [ ] Config and Save SSID
-- [ ] Switch Statio and SoftAP
+- [ ] Switch Station and SoftAP
 	- [ ] by HTTP Request
 	- [ ] by GPIO pin
 - [ ] Sensor Interface
@@ -32,5 +32,5 @@ Fearture and To-Do list:
 	- [ ] ADC
 - [ ] Sleep and WakeUp
 	- [ ] by RTC/Timer
-	- [ ] by Interrupt GPIO 
+	- [ ] by Interrupt GPIO
 	- [ ] by Sensor Trigger

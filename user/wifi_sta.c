@@ -8,6 +8,7 @@
 #include "user_interface.h"
 
 #include "httpd.h"
+#include "wifi_sta.h"
 
 LOCAL os_timer_t ip_test_timer;
 
@@ -71,5 +72,8 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
 
 void ICACHE_FLASH_ATTR user_wifi_station_init(void){
     wifi_set_opmode(STATION_MODE);
+#if USE_MAX_POWER
+    wifi_set_phy_mode(PHY_MODE_11N);
+#endif
     user_wifi_station_conf();
 }
