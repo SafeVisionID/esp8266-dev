@@ -10,5 +10,6 @@ Fearture and To-Do list:
 - ~~Basic LED Blink~~
 - ~~UART Boot Info~~
 - ~~UART Shell and Response/Callback~~
-- Wifi AP mode
+- Basic HTTP Server
 - Wifi Station mode
+- Wifi AP mode
