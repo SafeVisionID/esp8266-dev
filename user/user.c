@@ -3,10 +3,13 @@
 #include "gpio.h"
 #include "os_type.h"
 #include "user_config.h"
+
 #include "driver/uart.h"
 #include "driver/gpio16.h"
 
 #include "blinky.h"
+#include "httpd.h"
+#include "wifi_sta.h"
 
 #define SERIALBAUD 9600
 
@@ -46,5 +49,7 @@ void ICACHE_FLASH_ATTR user_init(){
 
 	os_timer_setfn(&blinky_timer, (os_timer_func_t *)blinky_timer_handler, NULL);
     os_timer_arm(&blinky_timer, 500, 1);
+
+    user_wifi_station_init();
 }
 

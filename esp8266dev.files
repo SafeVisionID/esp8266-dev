@@ -4,5 +4,9 @@ driver/uart.c
 driver/user_config.h
 user/blinky.c
 user/blinky.h
+user/httpd.c
+user/httpd.h
 user/user.c
 user/user_config.h
+user/wifi.sta.c
+user/wifi_sta.h

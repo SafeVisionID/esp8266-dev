@@ -10,7 +10,7 @@
 os_timer_t blinky_timer;
 static uint8_t led_on = 0;
 
-void blinky_timer_handler(void *prv){
+void ICACHE_FLASH_ATTR blinky_timer_handler(void *prv){
   	if (led_on==1) {
   		gpio_output_set(0, (1 << 2), 0, 0);
     		gpio16_output_set(1);

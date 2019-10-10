@@ -10,6 +10,24 @@ Fearture and To-Do list:
 - ~~Basic LED Blink~~
 - ~~UART Boot Info~~
 - ~~UART Shell and Response/Callback~~
-- Basic HTTP Server
-- Wifi Station mode
-- Wifi AP mode
+- ~~Basic HTTP Server~~
+	- ~~Basic HTML Response~~
+	- ~~Serial Out Response~~
+	- Receive Serial Request
+	- Reset Request
+- ~~Wifi Station mode~~
+	- ~~Config and Save Password~~
+	- Config and Save SSID
+- Wifi SoftAP mode
+	- Config and Save Password
+	- Config and Save SSID
+- Switch Statio and SoftAP
+	- by HTTP Request
+	- by GPIO pin
+- Sensor Interface
+	- GPIO Logic
+	- ADC
+- Sleep and WakeUp
+	- by RTC/Timer
+	- by Interrupt GPIO 
+	- by Sensor Trigger
