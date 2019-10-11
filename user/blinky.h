@@ -5,6 +5,7 @@
 #define LED_WIFI_OFF    0
 
 void blinky_init(void);
-void blinky_wifi(uint8 wifiled);
+void led_wifi_softap(void);
+void blinky_wifi_station(void);
 
 #endif

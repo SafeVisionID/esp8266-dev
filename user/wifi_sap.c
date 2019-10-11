@@ -8,6 +8,7 @@
 #include "user_interface.h"
 
 #include "httpd.h"
+#include "blinky.h"
 #include "wifi_sap.h"
 
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
@@ -49,6 +50,8 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
     user_wifi_softap_set_ip();
 
     wifi_softap_set_config(&softapConf);
+
+    led_wifi_softap();
 }
 
 void ICACHE_FLASH_ATTR user_wifi_softap_init(void){
