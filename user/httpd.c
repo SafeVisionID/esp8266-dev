@@ -5,12 +5,12 @@
 #include "ip_addr.h"
 #include "mem.h"
 #include "espconn.h"
-#include "spi_flash.h"
 #include "user_interface.h"
 #include "driver/uart.h"
 #include "driver/uart_register.h"
 
 #include "httpd.h"
+#include "rwflash.h"
 
 LOCAL struct espconn esp_conn;
 LOCAL esp_tcp esptcp;
@@ -200,20 +200,13 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             http_resp(pespconn,200,NULL);
 
             uint32 temp[1] = {0x05};
+            uint32 buff[1];
 
-            uint32 val;
-            uint32 *buff = &val;
+            rwflash_one_write(TEST_FLASH_ADDR,temp);
+            os_printf("Write 0x8c:0x%02x \r\n", temp[0]);
 
-            uint8 i = spi_flash_erase_sector(TEST_FLASH_ADDR);
-            os_printf("spi_flash_erase_sector: %d\n", i);
-
-            uint8 o = spi_flash_write(TEST_FLASH_ADDR * SPI_FLASH_SEC_SIZE, temp, 1);
-            os_printf("spi_flash_write: %d\n", o);
-            os_printf("0x8c sec:0x%02x \r\n", temp[0]);
-
-            uint8 p = spi_flash_read(TEST_FLASH_ADDR * SPI_FLASH_SEC_SIZE, buff, 1);
-            os_printf("spi_flash_read: %d\n", p);
-            os_printf("0x8c sec:0x%02x \r\n", buff[0]);
+            rwflash_one_read(TEST_FLASH_ADDR,buff);
+            os_printf("Read 0x8c sec:0x%02x \r\n", buff[0]);
         }
         else{
             http_resp(pespconn,200,NULL);

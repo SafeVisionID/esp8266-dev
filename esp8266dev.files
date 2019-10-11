@@ -6,6 +6,8 @@ user/blinky.c
 user/blinky.h
 user/httpd.c
 user/httpd.h
+user/rwflash.c
+user/rwflash.h
 user/user.c
 user/user_config.h
 user/wifi_sap.c
