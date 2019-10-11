@@ -196,17 +196,31 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             system_restart();
         }
-        else if(os_strcmp("flash",strReq)==0){
+        else if(os_strcmp("intsave",strReq)==0){
             http_resp(pespconn,200,NULL);
 
-            uint32 temp[1] = {0x05};
-            uint32 buff[1];
+            uint16 temp[1] = {0x05};
+            uint16 buff[1];
 
-            rwflash_one_write(TEST_FLASH_ADDR,temp);
-            os_printf("Write 0x8c:0x%02x \r\n", temp[0]);
+            rwflash_int_write(TEST_FLASH_ADDR,temp);
+            os_printf("Write 0x81:0x%02x \r\n", temp[0]);
 
-            rwflash_one_read(TEST_FLASH_ADDR,buff);
-            os_printf("Read 0x8c sec:0x%02x \r\n", buff[0]);
+            rwflash_int_read(TEST_FLASH_ADDR,buff);
+            os_printf("Read 0x81 sec:0x%02x \r\n", buff[0]);
+        }
+        else if(os_strcmp("strsave",strReq)==0){
+            http_resp(pespconn,200,NULL);
+
+            char temp[TEST_FLASH_STRLEN];
+            char buff[TEST_FLASH_STRLEN];
+
+            os_strcpy(temp,"hello");
+
+            rwflash_str_write(TEST_FLASH_ADDR,temp);
+            os_printf("Write 0x81 sec: %s\r\n",temp);
+
+            rwflash_str_read(TEST_FLASH_ADDR,buff);
+            os_printf("Read 0x81 sec: %s\r\n",buff);
         }
         else{
             http_resp(pespconn,200,NULL);
