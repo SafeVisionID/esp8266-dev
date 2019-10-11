@@ -19,8 +19,6 @@
 
 #define SERIALBAUD 9600
 
-extern os_timer_t blinky_timer;
-
 void ICACHE_FLASH_ATTR print_os_printf(){
   uint8 bootmode;
 
@@ -49,12 +47,7 @@ void ICACHE_FLASH_ATTR user_init(){
     uart_rx_intr_enable(UART0);
     print_os_printf();
 
-	gpio_init();
-	gpio_output_set(0, 0, (1 << 2), 0);
-	gpio16_output_conf();
-
-	os_timer_setfn(&blinky_timer, (os_timer_func_t *)blinky_timer_handler, NULL);
-    os_timer_arm(&blinky_timer, 500, 1);
+    blinky_init();
 
     if(wifi_get_opmode_default()==0x02){
         user_wifi_softap_init();

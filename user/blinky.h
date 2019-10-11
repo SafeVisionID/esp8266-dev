@@ -1,6 +1,11 @@
 #ifndef _BLINKY_
 #define _BLINKY_
 
-void blinky_timer_handler(void *prv);
+#define USE_GPIO2_BLINK 0
+#define LED_WIFI_ON     1
+#define LED_WIFI_OFF    0
+
+void blinky_init(void);
+void blinky_wifi(uint8 wifiled);
 
 #endif
