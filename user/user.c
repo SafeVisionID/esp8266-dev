@@ -49,10 +49,10 @@ void ICACHE_FLASH_ATTR user_init(){
 
     blinky_init();
 
-    if(wifi_get_opmode_default()==0x02){
+    if(wifi_get_opmode_default()==SOFTAP_MODE){
         user_wifi_softap_init();
     }
-    else if (wifi_get_opmode_default()==0x01) {
+    else if (wifi_get_opmode_default()==STATION_MODE) {
         user_wifi_station_init();
     }
 }

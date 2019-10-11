@@ -178,13 +178,19 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
        }
        else if(os_strcmp("station",strReq)==0){
             http_resp(pespconn,200,NULL);
+
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+
             wifi_set_opmode(STATION_MODE);
+            system_restart();
        }
        else if(os_strcmp("softap",strReq)==0){
             http_resp(pespconn,200,NULL);
+
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+
             wifi_set_opmode(SOFTAP_MODE);
+            system_restart();
        }
        else if(os_strcmp("serial",strReq)==0){
             os_printf("Serial Response as HTTP request\r\n");

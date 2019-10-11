@@ -8,6 +8,7 @@
 #include "user_interface.h"
 
 #include "httpd.h"
+#include "blinky.h"
 #include "wifi_sta.h"
 
 LOCAL os_timer_t ip_test_timer;
@@ -21,6 +22,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_check_ip(void){
 
     if(wifi_station_get_connect_status() == STATION_GOT_IP && ipconfig.ip.addr !=0 ){
         os_printf("got ip !!! \r\n");
+        blinky_wifi(LED_WIFI_ON);
         user_tcpserver_init(SERVER_LOCAL_PORT);
     }else{
         if (wifi_station_get_connect_status() == STATION_WRONG_PASSWORD ||
