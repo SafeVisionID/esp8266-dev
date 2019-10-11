@@ -27,7 +27,7 @@ Fearture and To-Do list:
 	- [x] Config Station SSID and Password
 	- [ ] Config Device ID
 - [x] Switch Station and SoftAP
-	- [x] WiFi Status Indicator (GPIO2: ON->SoftAP | OFF->StationNoIP | BLINK->StationGotIP)
+	- [x] WiFi Status Indicator (LED GPIO2)
 	- [x] by HTTP Request
 	- [ ] by GPIO pin
 - [ ] Sensor Interface
