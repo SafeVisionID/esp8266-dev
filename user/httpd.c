@@ -5,6 +5,7 @@
 #include "ip_addr.h"
 #include "mem.h"
 #include "espconn.h"
+#include "spi_flash.h"
 #include "user_interface.h"
 #include "driver/uart.h"
 #include "driver/uart_register.h"
@@ -176,10 +177,12 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             http_resp(pespconn,200,(char*)txthtml);
        }
        else if(os_strcmp("station",strReq)==0){
+            http_resp(pespconn,200,NULL);
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             wifi_set_opmode(STATION_MODE);
        }
        else if(os_strcmp("softap",strReq)==0){
+            http_resp(pespconn,200,NULL);
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             wifi_set_opmode(SOFTAP_MODE);
        }
@@ -189,8 +192,28 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             http_resp(pespconn,200,(char*)txthtml);
         }
         else if(os_strcmp("restart",strReq)==0){
+            http_resp(pespconn,200,NULL);
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             system_restart();
+        }
+        else if(os_strcmp("flash",strReq)==0){
+            http_resp(pespconn,200,NULL);
+
+            uint32 temp[1] = {0x05};
+
+            uint32 val;
+            uint32 *buff = &val;
+
+            uint8 i = spi_flash_erase_sector(TEST_FLASH_ADDR);
+            os_printf("spi_flash_erase_sector: %d\n", i);
+
+            uint8 o = spi_flash_write(TEST_FLASH_ADDR * SPI_FLASH_SEC_SIZE, temp, 1);
+            os_printf("spi_flash_write: %d\n", o);
+            os_printf("0x8c sec:0x%02x \r\n", temp[0]);
+
+            uint8 p = spi_flash_read(TEST_FLASH_ADDR * SPI_FLASH_SEC_SIZE, buff, 1);
+            os_printf("spi_flash_read: %d\n", p);
+            os_printf("0x8c sec:0x%02x \r\n", buff[0]);
         }
         else{
             http_resp(pespconn,200,NULL);
