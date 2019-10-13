@@ -176,21 +176,10 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_sprintf(txthtml,"SoftAP Mode Information | SSID: SafeVisionID | PASS: safevision | URL: http://192.168.5.1:8080/");
             http_resp(pespconn,200,(char*)txthtml);
        }
-       else if(os_strcmp("station",strReq)==0){
+       else if(os_strcmp("switch",strReq)==0){
             http_resp(pespconn,200,NULL);
 
-            uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
-
-            wifi_set_opmode(STATION_MODE);
-            system_restart();
-       }
-       else if(os_strcmp("softap",strReq)==0){
-            http_resp(pespconn,200,NULL);
-
-            uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
-
-            wifi_set_opmode(SOFTAP_MODE);
-            system_restart();
+            user_wifi_switch();
        }
        else if(os_strcmp("serial",strReq)==0){
             os_printf("Serial Response as HTTP request\r\n");
@@ -265,5 +254,27 @@ void ICACHE_FLASH_ATTR user_tcpserver_init(uint32 port){
 
     int8 ret = espconn_accept(&esp_conn);
     os_printf("espconn_accepted at [%d]\r\n", ret);
+}
+
+void ICACHE_RODATA_ATTR user_wifi_switch(void){
+    uint8 wifi_mode;
+
+    wifi_mode = wifi_get_opmode();
+
+    uint8 i;for(i=0;i<200;i++){os_delay_us(10000);}
+
+    if(wifi_mode == SOFTAP_MODE){
+        wifi_set_opmode(STATION_MODE);
+    }
+    else if(wifi_mode == STATION_MODE){
+        wifi_set_opmode(SOFTAP_MODE);
+    }
+    else if(wifi_mode == STATIONAP_MODE){
+        wifi_set_opmode(SOFTAP_MODE);
+    }
+
+#if SWITCH_REBOOT
+    system_restart();
+#endif
 }
 
