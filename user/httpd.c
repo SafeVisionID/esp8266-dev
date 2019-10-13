@@ -257,9 +257,7 @@ void ICACHE_FLASH_ATTR user_tcpserver_init(uint32 port){
 }
 
 void ICACHE_RODATA_ATTR user_wifi_switch(void){
-    uint8 wifi_mode;
-
-    wifi_mode = wifi_get_opmode();
+    uint8 wifi_mode = wifi_get_opmode();
 
     uint8 i;for(i=0;i<200;i++){os_delay_us(10000);}
 
