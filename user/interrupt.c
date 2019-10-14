@@ -11,7 +11,7 @@ LOCAL void ICACHE_FLASH_ATTR gpio_intr_handler(){
     GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
 }
 
-void ICACHE_FLASH_ATTR user_pin_interrupt_init(void){
+void ICACHE_FLASH_ATTR user_intrr_gpio_init(void){
     PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO0_U, FUNC_GPIO0);
     PIN_PULLUP_DIS(PERIPHS_IO_MUX_GPIO0_U);
     GPIO_DIS_OUTPUT(GPIO_ID_PIN(0));

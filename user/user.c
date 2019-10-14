@@ -15,7 +15,7 @@
 #include "httpd.h"
 #include "wifi_sap.h"
 #include "wifi_sta.h"
-#include "pin_interrupt.h"
+#include "interrupt.h"
 
 #define SERIALBAUD 9600
 
@@ -60,8 +60,7 @@ void ICACHE_FLASH_ATTR user_init(){
     uart_rx_intr_enable(UART0);
     print_os_printf();
 
-    user_pin_interrupt_init();
-
+    user_intrr_gpio_init();
     blinky_init();
 
     run_wifi_mode();

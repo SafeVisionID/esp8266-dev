@@ -6,8 +6,8 @@ user/blinky.c
 user/blinky.h
 user/httpd.c
 user/httpd.h
-user/pin_interrupt.c
-user/pin_interrupt.h
+user/interrupt.c
+user/interrupt.h
 user/rwflash.c
 user/rwflash.h
 user/user.c
