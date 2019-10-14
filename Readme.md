@@ -19,7 +19,7 @@ Fearture and To-Do list:
 	- [x] Serial Out Response
 	- [x] Reset Request
 	- [x] R/W Integer/String in Flash
-	- [ ] Receive Serial Request
+	- [x] Receive Serial Request
 - [x] Wifi Station mode
 	- [x] Config Password
 	- [x] Config SSID
