@@ -1,7 +1,6 @@
 Makefile
-driver/gpio16.c
-driver/uart.c
-driver/user_config.h
+user/drv_gpio16.c
+user/drv_uart.c
 user/blinky.c
 user/blinky.h
 user/httpd.c
