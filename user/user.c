@@ -60,7 +60,11 @@ void ICACHE_FLASH_ATTR user_init(){
     uart_rx_intr_enable(UART0);
     print_os_printf();
 
+#if GPIO_INTRR_USE_POLL
     user_poll_gpio_init();
+#else
+    user_intrr_gpio_init();
+#endif
     blinky_init();
 
     run_wifi_mode();
