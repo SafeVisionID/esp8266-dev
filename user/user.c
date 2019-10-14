@@ -19,7 +19,7 @@
 
 #define SERIALBAUD 9600
 
-LOCAL void ICACHE_RODATA_ATTR run_wifi_mode(void){
+LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
     uint8 last_wifi_mode;
 
     last_wifi_mode = wifi_get_opmode_default();
@@ -60,7 +60,7 @@ void ICACHE_FLASH_ATTR user_init(){
     uart_rx_intr_enable(UART0);
     print_os_printf();
 
-    user_intrr_gpio_init();
+    user_poll_gpio_init();
     blinky_init();
 
     run_wifi_mode();

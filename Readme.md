@@ -13,6 +13,7 @@ Fearture and To-Do list:
 - [x] Basic LED Blink
 - [x] UART Boot Info
 - [x] UART Shell and Response/Callback
+- [x] GPIO Interrupt (using Polling)
 - [x] Basic HTTP Server
 	- [x] Basic HTML Response
 	- [x] Serial Out Response

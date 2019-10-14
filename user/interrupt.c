@@ -3,21 +3,26 @@
 #include "gpio.h"
 #include "os_type.h"
 
-LOCAL void ICACHE_FLASH_ATTR gpio_intr_handler(){
-    uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
+LOCAL os_timer_t gpio_poll_timer;
+LOCAL uint8 gpio12_stt = 0;
 
-    os_printf_plus("GPIO Interrupt Called\r\n");
-
-    GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
+LOCAL void ICACHE_RODATA_ATTR gpio_poll_handler(){
+    if( !(GPIO_INPUT_GET(GPIO_ID_PIN(12))) ){
+        if(gpio12_stt==0){
+            os_printf_plus("GPIO Interrupt Triggered\r\n");
+            gpio12_stt = 1;
+        }
+    }
+    else{
+        gpio12_stt = 0;
+    }
 }
 
-void ICACHE_FLASH_ATTR user_intrr_gpio_init(void){
-    PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO0_U, FUNC_GPIO0);
-    PIN_PULLUP_DIS(PERIPHS_IO_MUX_GPIO0_U);
-    GPIO_DIS_OUTPUT(GPIO_ID_PIN(0));
+void ICACHE_FLASH_ATTR user_poll_gpio_init(void){
+    PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDI_U, FUNC_GPIO12);
+    PIN_PULLUP_EN(PERIPHS_IO_MUX_MTDI_U);
+    GPIO_DIS_OUTPUT(GPIO_ID_PIN(12));
 
-    ETS_GPIO_INTR_DISABLE();
-    ETS_GPIO_INTR_ATTACH(gpio_intr_handler, NULL);
-    gpio_pin_intr_state_set(GPIO_ID_PIN(0),GPIO_PIN_INTR_ANYEDGE);
-    ETS_GPIO_INTR_ENABLE();
+    os_timer_setfn(&gpio_poll_timer, (os_timer_func_t *)gpio_poll_handler, NULL);
+    os_timer_arm(&gpio_poll_timer, 1, 1);
 }

@@ -7,8 +7,8 @@
 
 #include "blinky.h"
 
-os_timer_t blinky_timer;
-os_timer_t wifiled_timer;
+static os_timer_t blinky_timer;
+static os_timer_t wifiled_timer;
 static uint8_t led_on = 0,wifiled_on = 0;
 
 LOCAL void ICACHE_FLASH_ATTR blinky_timer_handler(void *prv){
