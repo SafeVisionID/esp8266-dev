@@ -13,21 +13,18 @@
 
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
 
-    const char* start_ip = "192.168.5.100";
-    const char* end_ip = "192.168.5.105";
     struct dhcps_lease dhcplease;
-
     struct ip_info ipinfo;
 
     wifi_softap_dhcps_stop();
 
-    IP4_ADDR(&ipinfo.ip, 192, 168, 5, 1);
-    IP4_ADDR(&ipinfo.gw, 192, 168, 1, 1);
+    IP4_ADDR(&ipinfo.ip, IP_BASE0, IP_BASE1, IP_CLASS, 1);
+    IP4_ADDR(&ipinfo.gw, IP_BASE0, IP_BASE1, IP_GTWAY, 1);
     IP4_ADDR(&ipinfo.netmask, 255, 255, 255, 0);
     wifi_set_ip_info(SOFTAP_IF,&ipinfo);
 
-    IP4_ADDR(&dhcplease.start_ip, 192, 168, 5, 100);
-    IP4_ADDR(&dhcplease.end_ip, 192, 168, 5, 105);
+    IP4_ADDR(&dhcplease.start_ip, IP_BASE0, IP_BASE1, IP_CLASS, IP_START);
+    IP4_ADDR(&dhcplease.end_ip, IP_BASE0, IP_BASE1, IP_CLASS, IP_END);
     wifi_softap_set_dhcps_lease(&dhcplease);
 
     wifi_softap_dhcps_start();
