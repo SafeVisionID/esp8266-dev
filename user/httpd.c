@@ -71,10 +71,8 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_parse(char *strIN, char *strOUT){
             j=0;
         }
         else {
-            if(strInput[i] != '/'){
-                strSplit[cnt][j]=strInput[i];
-                j++;
-            }
+            strSplit[cnt][j]=strInput[i];
+            j++;
         }
     }
 
@@ -89,7 +87,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_conf_parse(char *strIN, char *strOUT,uint8 num)
     os_strcpy(strInput,strIN);
     j=0; cnt=0;
     for(i=0;i<=os_strlen(strInput);i++){
-        if(strInput[i]==' ' || strInput[i]=='\0' || strInput[i]=='='){
+        if(strInput[i]==' ' || strInput[i]=='\0' || strInput[i]=='/'){
             strSplit[cnt][j]='\0';
             cnt++;
             j=0;
@@ -125,6 +123,8 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     else{
         tcp_server_parse(pusrdata,strRecv);
         tcp_conf_parse(strRecv,strReq,STR_REQ);
+
+        os_printf_plus("parsed recv: %s\r\n",strRecv);
 
         if(os_strcmp("pass",strReq)==0){
             wifi_set_opmode_current(STATIONAP_MODE);

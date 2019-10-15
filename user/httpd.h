@@ -3,8 +3,8 @@
 
 #define SERVER_LOCAL_PORT   3000
 
-#define STR_REQ     0
-#define STR_DATA    1
+#define STR_REQ     1
+#define STR_DATA    2
 
 #define SWITCH_REBOOT       1
 

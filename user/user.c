@@ -35,8 +35,7 @@ LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
 LOCAL void ICACHE_FLASH_ATTR print_os_printf(){
     uint8 bootmode;
 
-    os_printf("\r\n\r\n");
-    os_printf("[INFO] -------------------------------------------\r\n");
+    os_printf("\r\n\r\n[INFO] -------------------------------------------\r\n");
 
     os_printf("[INFO] Compiled at %s %s\r\n", __DATE__,__TIME__);
     os_printf("[INFO] SDK: %s\r\n", system_get_sdk_version());
