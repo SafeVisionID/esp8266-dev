@@ -126,25 +126,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
         os_printf_plus("parsed recv: %s\r\n",strRecv);
 
-        if(os_strcmp("pass",strReq)==0){
-            wifi_set_opmode_current(STATIONAP_MODE);
-
-            tcp_conf_parse(strRecv,password,STR_DATA);
-            os_printf("new password: %s\r\n",password);
-
-            os_sprintf(txthtml,"new password: %s",password);
-            http_resp(pespconn,200,(char*)txthtml);
-
-            os_memset(stationConf.password, 0, 64);
-            stationConf.bssid_set = 0;
-
-            wifi_station_get_config(&stationConf);
-            os_memcpy(&stationConf.password, password, 64);
-            wifi_station_set_config(&stationConf);
-
-            wifi_set_opmode_current(SOFTAP_MODE);
-        }
-        else if(os_strcmp("ssid",strReq)==0){
+        if(os_strcmp("ssid",strReq)==0){
             wifi_set_opmode_current(STATIONAP_MODE);
 
             tcp_conf_parse(strRecv,ssid,STR_DATA);
@@ -158,6 +140,24 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             wifi_station_get_config(&stationConf);
             os_memcpy(&stationConf.ssid, ssid, 32);
+            wifi_station_set_config(&stationConf);
+
+            wifi_set_opmode_current(SOFTAP_MODE);
+        }
+        else if(os_strcmp("password",strReq)==0){
+            wifi_set_opmode_current(STATIONAP_MODE);
+
+            tcp_conf_parse(strRecv,password,STR_DATA);
+            os_printf("new password: %s\r\n",password);
+
+            os_sprintf(txthtml,"new password: %s",password);
+            http_resp(pespconn,200,(char*)txthtml);
+
+            os_memset(stationConf.password, 0, 64);
+            stationConf.bssid_set = 0;
+
+            wifi_station_get_config(&stationConf);
+            os_memcpy(&stationConf.password, password, 64);
             wifi_station_set_config(&stationConf);
 
             wifi_set_opmode_current(SOFTAP_MODE);
