@@ -4,6 +4,7 @@
 #include "os_type.h"
 
 #include "interrupt.h"
+#include "httpd.h"
 
 #if GPIO_INTRR_USE_POLL
 
@@ -13,7 +14,8 @@ LOCAL uint8 gpio12_stt = 0;
 LOCAL void ICACHE_RODATA_ATTR gpio_poll_handler(){
     if( !(GPIO_INPUT_GET(GPIO_ID_PIN(GPIO_INTRR_PINNUM))) ){
         if(gpio12_stt==0){
-            os_printf_plus("GPIO Interrupt Triggered\r\n");
+            os_printf_plus("WiFi Mode Switched !!!\r\n");
+            user_wifi_switch();
             gpio12_stt = 1;
         }
     }

@@ -109,17 +109,24 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
     char ssid[32];
     char password[64];
+    char username[16];
     struct station_config stationConf;
+
+    uint16 addr = TEST_FLASH_ADDR;
 
     struct espconn *pespconn = arg;
     ptr = (char*) os_strstr(pusrdata,"\r\n");
     ptr[0] = '\0';
 
+//===================================================================
 // Define all HTTP request here
+
     os_printf("tcp recv : %s\r\n", pusrdata);
+
     if (os_strcmp(pusrdata, "GET / HTTP/1.1") == 0){
         http_resp(pespconn,200,(char*)index_html);
     }
+
     else{
         tcp_server_parse(pusrdata,strRecv);
         tcp_conf_parse(strRecv,strReq,STR_REQ);
@@ -162,6 +169,19 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             wifi_set_opmode_current(SOFTAP_MODE);
         }
+        else if(os_strcmp("username",strReq)==0){
+            tcp_conf_parse(strRecv,username,STR_DATA);
+            os_printf("new username: %s\r\n",username);
+
+            os_sprintf(txthtml,"new username: %s",username);
+            http_resp(pespconn,200,(char*)txthtml);
+
+            rwflash_str_write(TEST_FLASH_ADDR,username);
+
+            os_memset(username, 0, 16);
+            rwflash_str_read(TEST_FLASH_ADDR,username);
+            os_printf("saved username: %s\r\n",username);
+        }
         else if(os_strcmp("infosta",strReq)==0){
             wifi_station_get_config(&stationConf);
 
@@ -181,15 +201,17 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             user_wifi_switch();
        }
-       else if(os_strcmp("serial",strReq)==0){
-            os_printf("Serial Response as HTTP request\r\n");
-            os_sprintf(txthtml,"Serial Response Requested",password);
-            http_resp(pespconn,200,(char*)txthtml);
-        }
-        else if(os_strcmp("restart",strReq)==0){
+       else if(os_strcmp("restart",strReq)==0){
             http_resp(pespconn,200,NULL);
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             system_restart();
+       }
+
+//===================================================================
+       else if(os_strcmp("serial",strReq)==0){
+            os_printf("Serial Response as HTTP request\r\n");
+            os_sprintf(txthtml,"Serial Response Requested");
+            http_resp(pespconn,200,(char*)txthtml);
         }
         else if(os_strcmp("intsave",strReq)==0){
             http_resp(pespconn,200,NULL);
@@ -197,11 +219,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             uint16 temp[1] = {0x05};
             uint16 buff[1];
 
-            rwflash_int_write(TEST_FLASH_ADDR,temp);
-            os_printf("Write 0x81:0x%02x \r\n", temp[0]);
+            rwflash_int_write(addr,temp);
+            os_printf("Write 0x%X:0x%02x \r\n", addr, temp[0]);
 
-            rwflash_int_read(TEST_FLASH_ADDR,buff);
-            os_printf("Read 0x81 sec:0x%02x \r\n", buff[0]);
+            rwflash_int_read(addr,buff);
+            os_printf("Read 0x%X sec:0x%02x \r\n", addr, buff[0]);
         }
         else if(os_strcmp("strsave",strReq)==0){
             http_resp(pespconn,200,NULL);
@@ -211,15 +233,16 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             os_strcpy(temp,"hello");
 
-            rwflash_str_write(TEST_FLASH_ADDR,temp);
-            os_printf("Write 0x81 sec: %s\r\n",temp);
+            rwflash_str_write(addr,temp);
+            os_printf("Write 0x%X sec: %s\r\n",addr,temp);
 
-            rwflash_str_read(TEST_FLASH_ADDR,buff);
-            os_printf("Read 0x81 sec: %s\r\n",buff);
+            rwflash_str_read(addr,buff);
+            os_printf("Read 0x%X sec: %s\r\n",addr,buff);
         }
-        else{
-            http_resp(pespconn,200,NULL);
-        }
+
+//===================================================================
+        else{ http_resp(pespconn,200,NULL); }
+
     }
 }
 

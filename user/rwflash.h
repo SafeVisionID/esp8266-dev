@@ -1,7 +1,7 @@
 #ifndef RWFLASH_H
 #define RWFLASH_H
 
-#define TEST_FLASH_ADDR     0x81
+#define TEST_FLASH_ADDR     0x80
 #define TEST_FLASH_STRLEN   8
 
 void rwflash_int_write(uint16 sec,uint16 *src);
