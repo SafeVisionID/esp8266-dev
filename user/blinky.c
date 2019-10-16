@@ -31,14 +31,14 @@ LOCAL void ICACHE_FLASH_ATTR wifi_on_timer_handler(void *prv){
 }
 
 LOCAL void ICACHE_FLASH_ATTR wifi_off_timer_handler(void *prv){
-    if (wifi_led==11 || wifi_led==13) {
+    if (wifi_led==17 || wifi_led==19) {
         gpio_output_set(BIT2, 0, BIT2, 0);
 
     }
-    else if(wifi_led==10 || wifi_led==12) {
+    else if(wifi_led==16 || wifi_led==18) {
         gpio_output_set(0, BIT2, BIT2, 0);
     }
-    else if(wifi_led==14){
+    else if(wifi_led==20){
         wifi_led = 0;
     }else{
         gpio_output_set(BIT2, 0, BIT2, 0);
@@ -54,6 +54,7 @@ LOCAL void ICACHE_FLASH_ATTR blinky_timer_handler(void *prv){
 }
 #endif
 
+// SoftAP Mode
 void ICACHE_FLASH_ATTR blinky_wifi_softap(void){
     user_wifi_blink_off();
 
@@ -61,6 +62,8 @@ void ICACHE_FLASH_ATTR blinky_wifi_softap(void){
     os_timer_arm(&wifisap_timer, 500, 1);
 }
 
+
+// Station Mode Connected
 void ICACHE_FLASH_ATTR blinky_wifi_station(void){
     user_wifi_blink_off();
 
@@ -68,6 +71,7 @@ void ICACHE_FLASH_ATTR blinky_wifi_station(void){
     os_timer_arm(&wifista_timer, 100, 1);
 }
 
+// Station Mode Unconnected
 void ICACHE_FLASH_ATTR blinky_wifi_none(void){
     user_wifi_blink_off();
 

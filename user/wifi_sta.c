@@ -82,4 +82,5 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
 void ICACHE_FLASH_ATTR user_wifi_station_init(void){
     wifi_set_opmode(STATION_MODE);
     user_wifi_station_conf();
+    blinky_wifi_none();
 }
