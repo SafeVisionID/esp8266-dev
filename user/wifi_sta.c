@@ -25,6 +25,8 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_check_ip(void){
         blinky_wifi_station();
         user_tcpserver_init(SERVER_LOCAL_PORT);
     }else{
+        blinky_wifi_none();
+
         if (wifi_station_get_connect_status() == STATION_WRONG_PASSWORD ||
             wifi_station_get_connect_status() == STATION_NO_AP_FOUND ||
             wifi_station_get_connect_status() == STATION_CONNECT_FAIL){

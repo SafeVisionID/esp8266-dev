@@ -48,7 +48,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
 
     wifi_softap_set_config(&softapConf);
 
-    led_wifi_softap();
+    blinky_wifi_softap();
 }
 
 void ICACHE_FLASH_ATTR user_wifi_softap_init(void){
