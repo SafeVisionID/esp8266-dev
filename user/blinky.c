@@ -12,7 +12,8 @@ LOCAL os_timer_t wifista_timer;
 LOCAL os_timer_t wifisap_timer;
 LOCAL os_timer_t wifinon_timer;
 
-LOCAL uint8_t wifi_led = 0;
+LOCAL uint8 wifi_led = 0;
+LOCAL uint8 wifi_none_stt = 0;
 
 #if LED16_BLINKY
 LOCAL uint8 blink_led = 0;
@@ -65,18 +66,26 @@ void ICACHE_FLASH_ATTR blinky_wifi_softap(void){
 
 // Station Mode Connected
 void ICACHE_FLASH_ATTR blinky_wifi_station(void){
-    user_wifi_blink_off();
+    if(wifi_none_stt==1){
+        user_wifi_blink_off();
 
-    os_timer_setfn(&wifista_timer, (os_timer_func_t *)wifi_on_timer_handler, NULL);
-    os_timer_arm(&wifista_timer, 100, 1);
+        os_timer_setfn(&wifista_timer, (os_timer_func_t *)wifi_on_timer_handler, NULL);
+        os_timer_arm(&wifista_timer, 100, 1);
+
+        wifi_none_stt = 0;
+    }
 }
 
 // Station Mode Unconnected
 void ICACHE_FLASH_ATTR blinky_wifi_none(void){
-    user_wifi_blink_off();
+    if(wifi_none_stt==0){
+        user_wifi_blink_off();
 
-    os_timer_setfn(&wifinon_timer, (os_timer_func_t *)wifi_off_timer_handler, NULL);
-    os_timer_arm(&wifinon_timer, 100, 1);
+        os_timer_setfn(&wifinon_timer, (os_timer_func_t *)wifi_off_timer_handler, NULL);
+        os_timer_arm(&wifinon_timer, 100, 1);
+
+        wifi_none_stt = 1;
+    }
 }
 
 void ICACHE_FLASH_ATTR blinky_init(void){
