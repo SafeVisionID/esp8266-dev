@@ -192,7 +192,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
        }
         else if(os_strcmp("infosap",strReq)==0){
             os_printf("SoftAP Mode Information\r\n");
-            os_printf("SSID: SafeVisionID\r\nPASS: safevision\r\nURL: http://192.168.5.1:8080/\r\n");
+            os_printf("SSID: SafeVisionID\r\nPASS: safevision\r\nURL: http://192.168.4.1:8080/\r\n");
             os_sprintf(txthtml,"SoftAP Mode Information | SSID: SafeVisionID | PASS: safevision | URL: http://192.168.5.1:8080/");
             http_resp(pespconn,200,(char*)txthtml);
        }
