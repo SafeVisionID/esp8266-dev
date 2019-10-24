@@ -3,7 +3,7 @@
 
 #include "ets_sys.h"
 
-#define GPIO_INTRR_USE_POLL 1
+#define GPIO_INTRR_USE_POLL 0
 
 #define GPIO_INTRR_PINNUM   12
 #define GPIO_INTRR_PINNAME  PERIPHS_IO_MUX_MTDI_U

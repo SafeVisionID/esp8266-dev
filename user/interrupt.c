@@ -36,14 +36,12 @@ void ICACHE_FLASH_ATTR user_poll_gpio_init(void){
 
 LOCAL void gpio_intrr_handler(void *arg){
     uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
+    GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
 
     if (gpio_status & BIT(GPIO_INTRR_PINNUM)){
-        gpio_pin_intr_state_set(GPIO_ID_PIN(GPIO_INTRR_PINNUM), GPIO_PIN_INTR_DISABLE);
-        GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status & BIT(GPIO_INTRR_PINNUM));
-
-        os_printf_plus("GPIO Interrupt Triggered\r\n");
-
-        gpio_pin_intr_state_set(GPIO_ID_PIN(GPIO_INTRR_PINNUM), GPIO_PIN_INTR_NEGEDGE);
+        if(GPIO_INPUT_GET(GPIO_INTRR_PINNUM)){
+            os_printf_plus("GPIO Interrupt Triggered\r\n");
+    }
     }
 }
 
@@ -62,8 +60,9 @@ void ICACHE_FLASH_ATTR user_intrr_gpio_init(void){
 
     GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, BIT(GPIO_INTRR_PINNUM));
 
-    gpio_pin_intr_state_set(GPIO_ID_PIN(GPIO_INTRR_PINNUM), GPIO_PIN_INTR_NEGEDGE);
+    gpio_pin_intr_state_set(GPIO_ID_PIN(GPIO_INTRR_PINNUM), GPIO_PIN_INTR_POSEDGE);
 
     ETS_GPIO_INTR_ENABLE();
 }
+
 #endif
