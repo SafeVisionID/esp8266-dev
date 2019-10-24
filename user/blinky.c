@@ -7,7 +7,6 @@
 
 #include "blinky.h"
 
-LOCAL os_timer_t blinky_timer;
 LOCAL os_timer_t wifista_timer;
 LOCAL os_timer_t wifisap_timer;
 LOCAL os_timer_t wifinon_timer;
@@ -16,6 +15,7 @@ LOCAL uint8 wifi_led = 0;
 LOCAL uint8 wifi_none_stt = 0;
 
 #if LED16_BLINKY
+LOCAL os_timer_t blinky_timer;
 LOCAL uint8 blink_led = 0;
 #endif
 
@@ -89,8 +89,6 @@ void ICACHE_FLASH_ATTR blinky_wifi_none(void){
 }
 
 void ICACHE_FLASH_ATTR blinky_init(void){
-    gpio_init();
-
     PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO2_U, FUNC_GPIO2);
     PIN_PULLUP_DIS(PERIPHS_IO_MUX_GPIO2_U);
 

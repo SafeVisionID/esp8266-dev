@@ -32,7 +32,7 @@ LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
     }
 }
 
-LOCAL void ICACHE_FLASH_ATTR print_os_printf(){
+LOCAL void ICACHE_FLASH_ATTR print_os_info(){
     uint8 bootmode;
 
     os_printf("\r\n\r\n[INFO] -------------------------------------------\r\n");
@@ -55,9 +55,10 @@ LOCAL void ICACHE_FLASH_ATTR print_os_printf(){
 }
 
 void ICACHE_FLASH_ATTR user_init(){
+    gpio_init();
     uart_init(SERIALBAUD,SERIALBAUD);
     uart_rx_intr_enable(UART0);
-    print_os_printf();
+    print_os_info();
 
 #if GPIO_INTRR_USE_POLL
     user_poll_gpio_init();
