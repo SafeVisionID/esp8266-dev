@@ -1,4 +1,4 @@
 (fp_lib_table
   (lib (name ESP8266)(type KiCad)(uri ${KIPRJMOD}/esp8266-kicad/ESP8266.pretty)(options "")(descr ""))
-  (lib (name solder_pads)(type KiCad)(uri ${KIPRJMOD}/solderpads/solder_pads.pretty)(options "")(descr ""))
+  (lib (name solder_pads)(type KiCad)(uri ${KIPRJMOD}/custom-footprint/solder_pads.pretty)(options "")(descr ""))
 )
