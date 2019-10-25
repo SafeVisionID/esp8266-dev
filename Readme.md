@@ -32,7 +32,7 @@ Fearture and To-Do list:
 	- [x] by HTTP Request
 	- [x] by GPIO pin
 - [ ] Sensor Interface
-	- [ ] Magnet Switchs
+	- [ ] Magnet Switch
 	- [ ] PIR (Cont-Trigger and 3v3)
 - [ ] Sleep and WakeUp
 	- [ ] by RTC/Timer
