@@ -2,7 +2,5 @@
 *-bak
 *.bak
 *.bck
-*.png
 *.wings~
 /esp8266dev.creator.user
-/pcb/ESP8266-ESP-12E-chip-pinout-gpio-pin.png
