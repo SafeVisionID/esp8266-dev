@@ -30,10 +30,10 @@ Fearture and To-Do list:
 - [x] Switch Station and SoftAP
 	- [x] WiFi Status Indicator (LED GPIO2)
 	- [x] by HTTP Request
-	- [ ] by GPIO pin
+	- [x] by GPIO pin
 - [ ] Sensor Interface
-	- [ ] GPIO Logic
-	- [ ] ADC
+	- [ ] Magnet Switchs
+	- [ ] PIR (Cont-Trigger and 3v3)
 - [ ] Sleep and WakeUp
 	- [ ] by RTC/Timer
 	- [ ] by Interrupt GPIO

@@ -41,7 +41,7 @@ LOCAL void gpio_intrr_handler(void *arg){
     if (gpio_status & BIT(GPIO_INTRR_PINNUM)){
         if(GPIO_INPUT_GET(GPIO_INTRR_PINNUM)){
             os_printf_plus("GPIO Interrupt Triggered\r\n");
-    }
+        }
     }
 }
 
