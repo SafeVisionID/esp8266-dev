@@ -26,15 +26,21 @@ Fearture and To-Do list:
 - [x] Wifi SoftAP mode
 	- [x] Default IP, SSID, and Password
 	- [x] Config Station SSID and Password
-	- [ ] Config Device ID
+	- [x] Config Device ID
 - [x] Switch Station and SoftAP
 	- [x] WiFi Status Indicator (LED GPIO2)
 	- [x] by HTTP Request
 	- [x] by GPIO pin
 - [ ] Sensor Interface
-	- [ ] Magnet Switch
-	- [ ] PIR (Cont-Trigger and 3v3)
+	- [x] Magnet Switch
+	- [x] PIR (Cont-Trigger and 3v3)
+	- [ ] Server Checking
+	- [ ] Server Report
 - [ ] Sleep and WakeUp
 	- [ ] by RTC/Timer
-	- [ ] by Interrupt GPIO
 	- [ ] by Sensor Trigger
+- [ ] Power Manager Circuit
+	- [ ] Battery (LiPO)
+	- [ ] Regulator (AMS1117)
+- [ ] Blueprint
+	- [ ] PCB
