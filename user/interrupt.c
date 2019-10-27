@@ -10,12 +10,14 @@
 
 LOCAL os_timer_t gpio_poll_timer;
 LOCAL uint8 gpio12_stt,gpio13_stt, gpio14_stt;
+uint8 magnet_chk,pir_chk;
 
 LOCAL void ICACHE_RODATA_ATTR gpio_poll_handler(){
     if( !(GPIO_INPUT_GET(GPIO_ID_PIN(MAGNET_INTRR_PINNUM))) ){
         if(gpio12_stt==0){
             os_printf_plus("MAGNET LEVEL Switched !!!\r\n");
             gpio12_stt = 1;
+            magnet_chk = 1;
         }
     }
     else{
@@ -26,6 +28,7 @@ LOCAL void ICACHE_RODATA_ATTR gpio_poll_handler(){
         if(gpio13_stt==0){
             os_printf_plus("PIR Movement Detected!!!\r\n");
             gpio13_stt = 1;
+            pir_chk = 1;
         }
     }
     else{

@@ -11,6 +11,9 @@
 
 #include "httpd.h"
 #include "rwflash.h"
+#include "json.h"
+
+extern uint8 magnet_chk,pir_chk;
 
 LOCAL struct espconn esp_conn;
 LOCAL esp_tcp esptcp;
@@ -113,6 +116,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     struct station_config stationConf;
 
     uint16 addr = TEST_FLASH_ADDR;
+    char json_resp[64];
 
     struct espconn *pespconn = arg;
     ptr = (char*) os_strstr(pusrdata,"\r\n");
@@ -196,9 +200,21 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_sprintf(txthtml,"SoftAP Mode Information | SSID: SafeVisionID | PASS: safevision | URL: http://192.168.5.1:8080/");
             http_resp(pespconn,200,(char*)txthtml);
        }
+        else if(os_strcmp("jsonreq",strReq)==0){
+            json_open(json_resp);
+            json_boolean(json_resp,"magnet",magnet_chk);
+            json_boolean(json_resp,"pir",pir_chk);
+            json_close(json_resp);
+
+            // reset status on checking
+            magnet_chk = 0;
+            pir_chk = 0;
+
+            http_resp(pespconn,200,json_resp);
+            os_printf("JSON Data: %s\r\n",json_resp);
+        }
        else if(os_strcmp("switch",strReq)==0){
             http_resp(pespconn,200,NULL);
-
             user_wifi_switch();
        }
        else if(os_strcmp("restart",strReq)==0){
