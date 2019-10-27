@@ -28,6 +28,9 @@
 #include "driver/uart_register.h"
 #include "mem.h"
 #include "os_type.h"
+#include "user_interface.h"
+
+#include "analog.h"
 
 extern UartDevice    UartDev;
 
@@ -35,6 +38,9 @@ extern UartDevice    UartDev;
 char uart_rx_buffer[100];
 uint8 uart_rx_cnt = 0;
 uint8 uart_rx_send = 0;
+
+uint16 vadc;
+uint64 vsleep=1000000; //1s
 
 #define uart_recvTaskPrio        0
 #define uart_recvTaskQueueLen    10
@@ -200,6 +206,15 @@ uart_response(uint8 inChar){
             }
             else if(os_strcmp(uart_rx_buffer,"mems")==0){
                 os_printf("[INFO] Memory Info:\r\n"); system_print_meminfo();
+            }
+            else if(os_strcmp(uart_rx_buffer,"adc")==0){
+                vadc = user_get_adc();
+                os_printf("[INFO] ADC Input: %4d\r\n",vadc);
+            }
+            else if(os_strcmp(uart_rx_buffer,"sleep")==0){
+                os_printf("[INFO] Entering Deep Sleep\r\n");
+                system_deep_sleep_set_option(0);
+                system_deep_sleep(10*vsleep); // 10s
             }
             else{
                 os_strcat(uart_rx_buffer,"\r\n");

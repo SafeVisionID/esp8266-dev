@@ -37,10 +37,13 @@ Fearture and To-Do list:
 	- [ ] Server Checking
 	- [ ] Server Report
 - [ ] Sleep and WakeUp
-	- [ ] by RTC/Timer
+	- [x] by Sleep Time-Out
 	- [ ] by Sensor Trigger
 - [ ] Power Manager Circuit
 	- [ ] Battery (LiPO)
 	- [ ] Regulator (AMS1117)
-- [ ] Blueprint
-	- [ ] PCB
+- [ ] PCB
+	- [x] Main
+	- [ ] Battery Regulator
+- [ ] Additional
+	- [x] ADC Interface
