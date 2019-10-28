@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    interrupt.c
+ * @brief   GPIO Interrupt code.
+ *
+ * @addtogroup Sensor
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -8,10 +27,27 @@
 
 #if GPIO_INTRR_USE_POLL
 
-LOCAL os_timer_t gpio_poll_timer;
-LOCAL uint8 gpio12_stt,gpio13_stt, gpio14_stt;
-uint8 magnet_chk,pir_chk;
+/**
+ * @brief Magnet sensor lock check
+ */
+uint8 magnet_chk;
 
+/**
+ * @brief PIR sensor lock check
+ */
+uint8 pir_chk;
+
+/**
+ * @brief Interrupt polling timer
+ */
+LOCAL os_timer_t gpio_poll_timer;
+
+LOCAL uint8 gpio12_stt,gpio13_stt, gpio14_stt;
+
+/**
+ * @brief GPIO Interrupt polling handler
+ * @details All GPIO Interrupt response defined here
+ */
 LOCAL void ICACHE_RODATA_ATTR gpio_poll_handler(){
     if( !(GPIO_INPUT_GET(GPIO_ID_PIN(MAGNET_INTRR_PINNUM))) ){
         if(gpio12_stt==0){
@@ -66,6 +102,9 @@ void ICACHE_FLASH_ATTR user_poll_gpio_init(void){
 
 #else
 
+/**
+ * @brief HW Interrupt handler
+ */
 LOCAL void gpio_intrr_handler(void *arg){
     uint32 gpio_status = GPIO_REG_READ(GPIO_STATUS_ADDRESS);
     GPIO_REG_WRITE(GPIO_STATUS_W1TC_ADDRESS, gpio_status);
@@ -98,3 +137,4 @@ void ICACHE_FLASH_ATTR user_intrr_gpio_init(void){
 }
 
 #endif
+/** @} */

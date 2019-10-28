@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    analog.c
+ * @brief   Analog Input Test code.
+ *
+ * @addtogroup Sensor
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -16,3 +35,4 @@ uint16 ICACHE_RODATA_ATTR user_get_adc(void){
 
     return vres / ADC_MEASURES_NUM;
 }
+/** @} */

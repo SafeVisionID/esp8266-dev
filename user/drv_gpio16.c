@@ -22,10 +22,21 @@
  *
  */
 
+/**
+ * @file    drv_gpio16.c
+ * @brief   GPIO 16 Driver code.
+ *
+ * @addtogroup Indicator
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "driver/gpio16.h"
 
+/**
+ * @brief Set GPIO-16 as output
+ */
 void ICACHE_FLASH_ATTR
 gpio16_output_conf(void)
 {
@@ -39,6 +50,9 @@ gpio16_output_conf(void)
                    (READ_PERI_REG(RTC_GPIO_ENABLE) & (uint32)0xfffffffe) | (uint32)0x1);	//out enable
 }
 
+/**
+ * @brief Set GPIO-16 output value
+ */
 void ICACHE_FLASH_ATTR
 gpio16_output_set(uint8 value)
 {
@@ -46,6 +60,9 @@ gpio16_output_set(uint8 value)
                    (READ_PERI_REG(RTC_GPIO_OUT) & (uint32)0xfffffffe) | (uint32)(value & 1));
 }
 
+/**
+ * @brief Set GPIO-16 as input
+ */
 void ICACHE_FLASH_ATTR
 gpio16_input_conf(void)
 {
@@ -59,8 +76,12 @@ gpio16_input_conf(void)
                    READ_PERI_REG(RTC_GPIO_ENABLE) & (uint32)0xfffffffe);	//out disable
 }
 
+/**
+ * @brief Get GPIO-16 input value
+ */
 uint8 ICACHE_FLASH_ATTR
 gpio16_input_get(void)
 {
     return (uint8)(READ_PERI_REG(RTC_GPIO_IN_DATA) & 1);
 }
+/** @} */

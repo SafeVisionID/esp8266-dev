@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    json.c
+ * @brief   JSON String Builder code.
+ *
+ * @addtogroup Webserver
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -20,11 +39,12 @@ void json_string(char* strJSON, char* field, char* value){
     os_sprintf(strJSON,"%s\"%s\": \"%s\",",strJSON,field,value);
 }
 
-void json_boolean(char* strJSON, char* field, uint8 status){
-    if(status==0){
+void json_boolean(char* strJSON, char* field, uint8 value){
+    if(value==0){
         os_sprintf(strJSON,"%s\"%s\": false,",strJSON,field);
     }
-    else if (status==1) {
+    else if (value==1) {
         os_sprintf(strJSON,"%s\"%s\": true,",strJSON,field);
     }
 }
+/** @} */

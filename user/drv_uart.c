@@ -22,6 +22,14 @@
  *
  */
 
+/**
+ * @file    drv_uart.c
+ * @brief   GPIO 16 Driver code.
+ *
+ * @addtogroup Indicator
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "driver/uart.h"
@@ -34,12 +42,34 @@
 
 extern UartDevice    UartDev;
 
-// Achmadi's Here
-char uart_rx_buffer[100];
+/**
+ * @brief UART receive buffer size
+ */
+#define RX_BUFF_SIZE 100
+
+/**
+ * @brief UART receive buffer array
+ */
+char uart_rx_buffer[RX_BUFF_SIZE];
+
+/**
+ * @brief UART receive counter
+ */
 uint8 uart_rx_cnt = 0;
+
+/**
+ * @brief Receive response send flag
+ */
 uint8 uart_rx_send = 0;
 
+/**
+ * @brief UART ADC variable
+ */
 uint16 vadc;
+
+/**
+ * @brief Deep-Sleep time-out
+ */
 uint64 vsleep=1000000; //1s
 
 #define uart_recvTaskPrio        0
@@ -137,6 +167,10 @@ uart0_tx_buffer(uint8 *buf, uint16 len)
     }
 }
 
+/**
+ * @brief UART0 send string
+ * @param[in] String to send
+ */
 void ICACHE_FLASH_ATTR
 uart0_sendStr(const char *str)
 {
@@ -180,7 +214,11 @@ uart0_rx_intr_handler(void *para)
     }
 }
 
-// Achmadi's Here
+/**
+ * @brief UART response callback
+ * @details Callback Function not called directly
+ * @param[in] Character from receive buffer
+ */
 LOCAL void ICACHE_FLASH_ATTR
 uart_response(uint8 inChar){
     if(inChar == '\n' || inChar == '\r'){
@@ -254,6 +292,11 @@ uart_recvTask(os_event_t *events)
     }
 }
 
+/**
+ * @brief UART response callback
+ * @param[in] Baudrate value for UART0
+ * @param[in] Baudrate value for UART1
+ */
 void ICACHE_FLASH_ATTR
 uart_init(UartBautRate uart0_br, UartBautRate uart1_br)
 {
@@ -306,3 +349,4 @@ void uart_rx_intr_enable(uint8 uart_no)
 {
     SET_PERI_REG_MASK(UART_INT_ENA(uart_no), UART_RXFIFO_FULL_INT_ENA|UART_RXFIFO_TOUT_INT_ENA);
 }
+/** @} */

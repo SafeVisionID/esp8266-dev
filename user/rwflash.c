@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    rwflash.c
+ * @brief   Flash Memory code.
+ *
+ * @addtogroup Storage
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -32,3 +51,4 @@ void ICACHE_FLASH_ATTR rwflash_str_write(uint16 sec, char *src){
 void ICACHE_FLASH_ATTR rwflash_str_read(uint16 sec, char *des){
     rwflash_read(sec, (uint32 *)des);
 }
+/** @} */

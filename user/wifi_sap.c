@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    wifi_sap.c
+ * @brief   Wifi SoftAP code.
+ *
+ * @addtogroup Network
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -11,6 +30,9 @@
 #include "blinky.h"
 #include "wifi_sap.h"
 
+/**
+ * @brief Wifi SoftAP set IP Address
+ */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
 
     struct dhcps_lease dhcplease;
@@ -30,6 +52,9 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
     wifi_softap_dhcps_start();
 }
 
+/**
+ * @brief Wifi SoftAP configs
+ */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
     struct softap_config softapConf;
 
@@ -56,5 +81,4 @@ void ICACHE_FLASH_ATTR user_wifi_softap_init(void){
     user_tcpserver_init(SERVER_LOCAL_PORT);
     user_wifi_softap_conf();
 }
-
-
+/** @} */

@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    user.c
+ * @brief   Main code.
+ *
+ * @addtogroup Main
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -17,8 +36,15 @@
 #include "wifi_sta.h"
 #include "interrupt.h"
 
+/**
+ * @brief Default UART BaudRate
+ */
 #define SERIALBAUD 9600
 
+/**
+ * @brief Initialize Wifi
+ * @details Wifi Mode based on last saved config
+ */
 LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
     uint8 last_wifi_mode;
 
@@ -32,6 +58,9 @@ LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
     }
 }
 
+/**
+ * @brief Print some OS information
+ */
 LOCAL void ICACHE_FLASH_ATTR print_os_info(){
     uint8 bootmode;
 
@@ -54,6 +83,9 @@ LOCAL void ICACHE_FLASH_ATTR print_os_info(){
     os_printf("\r\n\r\n");
 }
 
+/**
+ * @brief Main Initialization
+ */
 void ICACHE_FLASH_ATTR user_init(){
     gpio_init();
     uart_init(SERIALBAUD,SERIALBAUD);
@@ -65,8 +97,8 @@ void ICACHE_FLASH_ATTR user_init(){
 #else
     user_intrr_gpio_init();
 #endif
-    blinky_init();
 
+    blinky_init();
     run_wifi_mode();
 }
-
+/** @} */

@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    wifi_sta.c
+ * @brief   Wifi Station code.
+ *
+ * @addtogroup Network
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -11,8 +30,14 @@
 #include "blinky.h"
 #include "wifi_sta.h"
 
+/**
+ * @brief Test IP routine timer
+ */
 LOCAL os_timer_t ip_test_timer;
 
+/**
+ * @brief Wifi Station IP check routine
+ */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_station_check_ip(void){
     struct ip_info ipconfig;
 
@@ -40,6 +65,9 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_check_ip(void){
     }
 }
 
+/**
+ * @brief Wifi Station config
+ */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
     struct station_config stationConf;
     char ssid[32];
@@ -84,3 +112,4 @@ void ICACHE_FLASH_ATTR user_wifi_station_init(void){
     user_wifi_station_conf();
     blinky_wifi_none();
 }
+/** @} */

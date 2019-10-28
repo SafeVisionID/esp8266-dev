@@ -1,3 +1,22 @@
+/*
+              UNKNOWN PUBLIC LICENSE
+
+ Copyright (C) 2019 Wira S.T. M.T.
+
+ Currently no license applied because author liv in
+ Indonesia, a country which doesn't really concern
+ about digital content copyright.
+
+ */
+
+/**
+ * @file    httpd.c
+ * @brief   TCP Server code.
+ *
+ * @addtogroup Webserver
+ * @{
+ */
+
 #include "ets_sys.h"
 #include "osapi.h"
 #include "gpio.h"
@@ -15,9 +34,19 @@
 
 extern uint8 magnet_chk,pir_chk;
 
+/**
+ * @brief Connection object
+ */
 LOCAL struct espconn esp_conn;
+
+/**
+ * @brief TCP/IP object
+ */
 LOCAL esp_tcp esptcp;
 
+/**
+ * @brief Default HTML Response
+ */
 LOCAL const char index_html[] = \
         "<!DOCTYPE html>"\
         "<html>"\
@@ -26,6 +55,12 @@ LOCAL const char index_html[] = \
         "</body>"\
         "</html>";
 
+/**
+ * @brief HTTP Response
+ * @param[in] Connection object
+ * @param[in] Error value
+ * @param[in] HTML string
+ */
 LOCAL void ICACHE_FLASH_ATTR http_resp(struct espconn *pespconn, int error, char *html_txt){
     char *buffer = NULL;
     int html_len = 0;
@@ -56,10 +91,20 @@ LOCAL void ICACHE_FLASH_ATTR http_resp(struct espconn *pespconn, int error, char
     }
 }
 
+/**
+ * @brief TCP Send Callback
+ * @details Callback Function not called directly
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_sent_cb(void *arg){
     os_printf("tcp data sent\r\n");
 }
 
+/**
+ * @brief TCP server parse
+ * @details Get request string from GET URL
+ * @param[in] URL String input
+ * @param[out] Parsed String output
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_parse(char *strIN, char *strOUT){
     char strInput[90];
     char strSplit[3][30];
@@ -82,6 +127,13 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_parse(char *strIN, char *strOUT){
     os_strcpy(strOUT,strSplit[1]);
 }
 
+/**
+ * @brief TCP config parse
+ * @details Split String by "/"
+ * @param[in] String Input
+ * @param[out] Desired part string output
+ * @param[in] Position of desired string
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_conf_parse(char *strIN, char *strOUT,uint8 num){
     char strInput[90];
     char strSplit[3][30];
@@ -104,6 +156,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_conf_parse(char *strIN, char *strOUT,uint8 num)
     os_strcpy(strOUT,strSplit[num]);
 }
 
+/**
+ * @brief TCP recieve Callback
+ * @details Callback Function not called directly
+ * @param[in] URL Request String
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsigned short len){
     char *ptr = 0;
     char txthtml[200];
@@ -115,7 +172,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     char username[16];
     struct station_config stationConf;
 
-    uint16 addr = TEST_FLASH_ADDR;
+    uint16 addr = FLASH_START_ADDR;
     char json_resp[64];
 
     struct espconn *pespconn = arg;
@@ -180,10 +237,10 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_sprintf(txthtml,"new username: %s",username);
             http_resp(pespconn,200,(char*)txthtml);
 
-            rwflash_str_write(TEST_FLASH_ADDR,username);
+            rwflash_str_write(addr,username);
 
             os_memset(username, 0, 16);
-            rwflash_str_read(TEST_FLASH_ADDR,username);
+            rwflash_str_read(addr,username);
             os_printf("saved username: %s\r\n",username);
         }
         else if(os_strcmp("infosta",strReq)==0){
@@ -262,15 +319,26 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     }
 }
 
+/**
+ * @brief TCP disconnected callback
+ * @details Callback Function not called directly
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_disconn_cb(void *arg){
     os_printf("tcp disconnected\r\n");
 }
 
+/**
+ * @brief TCP reconnecting callback
+ * @details Callback Function not called directly
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_reconn_cb(void *arg,int8 err){
     os_printf("reconnecting, error code %d !!! \r\n",err);
 
 }
 
+/**
+ * @brief TCP callbacks initialization
+ */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_listen(void *arg){
     struct espconn *pesp_conn = arg;
 
@@ -314,4 +382,4 @@ void ICACHE_RODATA_ATTR user_wifi_switch(void){
     system_restart();
 #endif
 }
-
+/** @} */
