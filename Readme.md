@@ -47,3 +47,7 @@ Fearture and To-Do list:
 	- [ ] Battery Regulator
 - [ ] Additional
 	- [x] ADC Interface
+	
+-----------------------------------------------------------------------
+
+Copyright (C) Wira ST MT

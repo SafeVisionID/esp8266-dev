@@ -1,14 +1,13 @@
 EESchema Schematic File Version 4
-LIBS:esp8266-module-cache
 EELAYER 26 0
 EELAYER END
 $Descr User 6000 6000
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
+Title "Door IoT Module Main Circuit"
+Date "2019-10-29"
 Rev ""
-Comp ""
+Comp "SafeVisionID by Wira ST MT"
 Comment1 ""
 Comment2 ""
 Comment3 ""
