@@ -237,26 +237,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             wifi_set_opmode_current(SOFTAP_MODE);
         }
-        else if(os_strcmp("userid",strReq)==0){
-            tcp_conf_parse(strRecv,user_id,STR_DATA);
-            os_printf("new username: %s\r\n",user_id);
-
-            os_sprintf(txthtml,"new username: %s",user_id);
-            http_resp(pespconn,200,(char*)txthtml);
-
-            rwflash_str_write(FLASH_USERID_ADDR,user_id);
-            os_printf("Write 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
-        }
-        else if(os_strcmp("devsid",strReq)==0){
-            tcp_conf_parse(strRecv,devs_id,STR_DATA);
-            os_printf("new deviceid: %s\r\n",devs_id);
-
-            os_sprintf(txthtml,"new deviceid: %s",devs_id);
-            http_resp(pespconn,200,(char*)txthtml);
-
-            rwflash_str_write(FLASH_DEVSID_ADDR,devs_id);
-            os_printf("Write 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
-        }
         else if(os_strcmp("infosta",strReq)==0){
             wifi_station_get_config(&stationConf);
 
@@ -265,35 +245,30 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_sprintf(txthtml,"Station Mode Information with SSID: %s and PASS: %s",stationConf.ssid,stationConf.password);
             http_resp(pespconn,200,(char*)txthtml);
         }
-        else if(os_strcmp("infouid",strReq)==0) {
-            os_memset(user_id, 0, 16);
-            rwflash_str_read(FLASH_USERID_ADDR,user_id);
-            os_printf("Read 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
-            os_printf("saved username: %s\r\n",user_id);
-            http_resp(pespconn,200,NULL);
-        }
-        else if(os_strcmp("infodid",strReq)==0) {
-            os_memset(devs_id, 0, 16);
-            rwflash_str_read(FLASH_DEVSID_ADDR,devs_id);
-            os_printf("Read 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
-            os_printf("saved deviceid: %s\r\n",devs_id);
-            http_resp(pespconn,200,NULL);
-        }
         else if(os_strcmp("jsoninfo",strReq)==0){
-            user_json_info(json_resp);
+
+            json_open(json_resp);
+            json_boolean(json_resp,"magnet",magnet_chk);
+            json_boolean(json_resp,"pir",pir_chk);
+            json_close(json_resp);
+
+            // reset status on checking
+            magnet_chk = 0;
+            pir_chk = 0;
+
             http_resp(pespconn,200,json_resp);
             os_printf("JSON Data: %s\r\n",json_resp);
         }
-       else if(os_strcmp("switch",strReq)==0){
+        else if(os_strcmp("switch",strReq)==0){
             http_resp(pespconn,200,NULL);
             user_wifi_switch();
-       }
-       else if(os_strcmp("restart",strReq)==0){
+        }
+        else if(os_strcmp("restart",strReq)==0){
             http_resp(pespconn,200,NULL);
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             system_restart();
-       }
-       else if(os_strcmp("serial",strReq)==0){
+        }
+        else if(os_strcmp("serial",strReq)==0){
             os_printf("Serial Response as HTTP request\r\n");
             os_sprintf(txthtml,"Serial Response Requested");
             http_resp(pespconn,200,(char*)txthtml);
@@ -387,32 +362,4 @@ void ICACHE_FLASH_ATTR user_wifi_switch(void){
 #endif
 }
 
-void ICACHE_FLASH_ATTR user_json_info(char *jsonInfo){
-    os_printf("Building JSON info \r\n");
-
-    char user_id[16];
-    char devs_id[16];
-    struct station_config stationConf;
-
-    wifi_station_get_config(&stationConf);
-
-    os_memset(user_id, 0, 16);
-    rwflash_str_read(FLASH_USERID_ADDR,user_id);
-
-    os_memset(devs_id, 0, 16);
-    rwflash_str_read(FLASH_DEVSID_ADDR,devs_id);
-
-    json_open(jsonInfo);
-    json_string(jsonInfo,"ssid",stationConf.ssid);
-    json_string(jsonInfo,"pass",stationConf.password);
-    json_string(jsonInfo,"user_id",user_id);
-    json_string(jsonInfo,"devs_id",devs_id);
-    json_boolean(jsonInfo,"magnet",magnet_chk);
-    json_boolean(jsonInfo,"pir",pir_chk);
-    json_close(jsonInfo);
-
-    // reset status on checking
-    magnet_chk = 0;
-    pir_chk = 0;
-}
 /** @} */

@@ -57,11 +57,5 @@ void user_tcpserver_init(uint32 port);
  */
 void user_wifi_switch(void);
 
-/**
- * @brief All Information in JSON Format
- * @param[out] Informations JSON string
- */
-void user_json_info(char* jsonInfo);
-
 #endif // HTTPD_H
 /** @} */
