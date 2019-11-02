@@ -66,7 +66,7 @@ LOCAL uint8 blink_led = 0;
 /**
  * @brief Disable all Wifi blinky timer
  */
-LOCAL void ICACHE_RODATA_ATTR user_wifi_blink_off(void){
+LOCAL void ICACHE_FLASH_ATTR user_wifi_blink_off(void){
     os_timer_disarm(&wifisap_timer);
     os_timer_disarm(&wifista_timer);
     os_timer_disarm(&wifinon_timer);

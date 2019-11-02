@@ -25,10 +25,13 @@
  */
 #define FLASH_START_ADDR    0x80
 
+#define FLASH_USERID_ADDR 0x81
+#define FLASH_DEVSID_ADDR 0x82
+
 /**
  * @brief Test Flash Length
  */
-#define TEST_FLASH_STRLEN   8
+#define TEST_FLASH_STRLEN   16
 
 /**
  * @brief Flash write integer

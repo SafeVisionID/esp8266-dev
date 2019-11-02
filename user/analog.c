@@ -25,7 +25,7 @@
 
 #include "analog.h"
 
-uint16 ICACHE_RODATA_ATTR user_get_adc(void){
+uint16 ICACHE_FLASH_ATTR user_get_adc(void){
     uint16 vres;
 
     uint8 i;

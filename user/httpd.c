@@ -169,13 +169,20 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
     char ssid[32];
     char password[64];
-    char username[16];
+    char user_id[16];
+    char devs_id[16];
     struct station_config stationConf;
 
-    uint16 addr = FLASH_START_ADDR;
-    char json_resp[64];
+#if SERVER_RESP_TEST
+    uint16 tempint[1] = {0x05};
+    uint16 buffint[1];
+    char tempstr[16];
+    char buffstr[16];
+#endif
 
+    char json_resp[64];
     struct espconn *pespconn = arg;
+
     ptr = (char*) os_strstr(pusrdata,"\r\n");
     ptr[0] = '\0';
 
@@ -230,18 +237,35 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             wifi_set_opmode_current(SOFTAP_MODE);
         }
-        else if(os_strcmp("username",strReq)==0){
-            tcp_conf_parse(strRecv,username,STR_DATA);
-            os_printf("new username: %s\r\n",username);
+        else if(os_strcmp("userid",strReq)==0){
+            tcp_conf_parse(strRecv,user_id,STR_DATA);
+            os_printf("new username: %s\r\n",user_id);
 
-            os_sprintf(txthtml,"new username: %s",username);
+            os_sprintf(txthtml,"new username: %s",user_id);
             http_resp(pespconn,200,(char*)txthtml);
 
-            rwflash_str_write(addr,username);
+            rwflash_str_write(FLASH_USERID_ADDR,user_id);
+            os_printf("Write 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
 
-            os_memset(username, 0, 16);
-            rwflash_str_read(addr,username);
-            os_printf("saved username: %s\r\n",username);
+            os_memset(user_id, 0, 16);
+            rwflash_str_read(FLASH_USERID_ADDR,user_id);
+            os_printf("Read 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
+            os_printf("saved username: %s\r\n",user_id);
+        }
+        else if(os_strcmp("devsid",strReq)==0){
+            tcp_conf_parse(strRecv,devs_id,STR_DATA);
+            os_printf("new deviceid: %s\r\n",devs_id);
+
+            os_sprintf(txthtml,"new deviceid: %s",devs_id);
+            http_resp(pespconn,200,(char*)txthtml);
+
+            rwflash_str_write(FLASH_DEVSID_ADDR,devs_id);
+            os_printf("Write 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
+
+            os_memset(devs_id, 0, 16);
+            rwflash_str_read(FLASH_DEVSID_ADDR,devs_id);
+            os_printf("Read 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
+            os_printf("saved deviceid: %s\r\n",devs_id);
         }
         else if(os_strcmp("infosta",strReq)==0){
             wifi_station_get_config(&stationConf);
@@ -250,23 +274,9 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_printf("SSID: %s\r\nPASS: %s\r\n",stationConf.ssid,stationConf.password);
             os_sprintf(txthtml,"Station Mode Information with SSID: %s and PASS: %s",stationConf.ssid,stationConf.password);
             http_resp(pespconn,200,(char*)txthtml);
-       }
-        else if(os_strcmp("infosap",strReq)==0){
-            os_printf("SoftAP Mode Information\r\n");
-            os_printf("SSID: SafeVisionID\r\nPASS: safevision\r\nURL: http://192.168.4.1:8080/\r\n");
-            os_sprintf(txthtml,"SoftAP Mode Information | SSID: SafeVisionID | PASS: safevision | URL: http://192.168.5.1:8080/");
-            http_resp(pespconn,200,(char*)txthtml);
-       }
-        else if(os_strcmp("jsonreq",strReq)==0){
-            json_open(json_resp);
-            json_boolean(json_resp,"magnet",magnet_chk);
-            json_boolean(json_resp,"pir",pir_chk);
-            json_close(json_resp);
-
-            // reset status on checking
-            magnet_chk = 0;
-            pir_chk = 0;
-
+        }
+        else if(os_strcmp("jsoninfo",strReq)==0){
+            user_json_info(json_resp);
             http_resp(pespconn,200,json_resp);
             os_printf("JSON Data: %s\r\n",json_resp);
         }
@@ -279,43 +289,34 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
             system_restart();
        }
-
-//===================================================================
        else if(os_strcmp("serial",strReq)==0){
             os_printf("Serial Response as HTTP request\r\n");
             os_sprintf(txthtml,"Serial Response Requested");
             http_resp(pespconn,200,(char*)txthtml);
         }
+#if SERVER_RESP_TEST
         else if(os_strcmp("intsave",strReq)==0){
             http_resp(pespconn,200,NULL);
 
-            uint16 temp[1] = {0x05};
-            uint16 buff[1];
+            rwflash_int_write(FLASH_START_ADDR,tempint);
+            os_printf("Write 0x%X:0x%02x \r\n", FLASH_START_ADDR, tempint[0]);
 
-            rwflash_int_write(addr,temp);
-            os_printf("Write 0x%X:0x%02x \r\n", addr, temp[0]);
-
-            rwflash_int_read(addr,buff);
-            os_printf("Read 0x%X sec:0x%02x \r\n", addr, buff[0]);
+            rwflash_int_read(FLASH_START_ADDR,buffint);
+            os_printf("Read 0x%X sec:0x%02x \r\n", FLASH_START_ADDR, buffint[0]);
         }
         else if(os_strcmp("strsave",strReq)==0){
             http_resp(pespconn,200,NULL);
 
-            char temp[TEST_FLASH_STRLEN];
-            char buff[TEST_FLASH_STRLEN];
+            os_strcpy(tempstr,"achmadiuser");
 
-            os_strcpy(temp,"hello");
+            rwflash_str_write(FLASH_START_ADDR,tempstr);
+            os_printf("Write 0x%X sec: %s\r\n",FLASH_START_ADDR,tempstr);
 
-            rwflash_str_write(addr,temp);
-            os_printf("Write 0x%X sec: %s\r\n",addr,temp);
-
-            rwflash_str_read(addr,buff);
-            os_printf("Read 0x%X sec: %s\r\n",addr,buff);
+            rwflash_str_read(FLASH_START_ADDR,buffstr);
+            os_printf("Read 0x%X sec: %s\r\n",FLASH_START_ADDR,buffstr);
         }
-
-//===================================================================
+#endif
         else{ http_resp(pespconn,200,NULL); }
-
     }
 }
 
@@ -333,7 +334,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_disconn_cb(void *arg){
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_server_reconn_cb(void *arg,int8 err){
     os_printf("reconnecting, error code %d !!! \r\n",err);
-
 }
 
 /**
@@ -363,7 +363,7 @@ void ICACHE_FLASH_ATTR user_tcpserver_init(uint32 port){
     os_printf("espconn_accepted at [%d]\r\n", ret);
 }
 
-void ICACHE_RODATA_ATTR user_wifi_switch(void){
+void ICACHE_FLASH_ATTR user_wifi_switch(void){
     uint8 wifi_mode = wifi_get_opmode();
 
     uint8 i;for(i=0;i<200;i++){os_delay_us(10000);}
@@ -381,5 +381,34 @@ void ICACHE_RODATA_ATTR user_wifi_switch(void){
 #if SWITCH_REBOOT
     system_restart();
 #endif
+}
+
+void ICACHE_FLASH_ATTR user_json_info(char *jsonInfo){
+    os_printf("Building JSON info \r\n");
+
+    char user_id[16];
+    char devs_id[16];
+    struct station_config stationConf;
+
+    wifi_station_get_config(&stationConf);
+
+    os_memset(user_id, 0, 16);
+    rwflash_str_read(FLASH_USERID_ADDR,user_id);
+
+    os_memset(devs_id, 0, 16);
+    rwflash_str_read(FLASH_DEVSID_ADDR,devs_id);
+
+    json_open(jsonInfo);
+    json_string(jsonInfo,"ssid",stationConf.ssid);
+    json_string(jsonInfo,"pass",stationConf.password);
+    json_string(jsonInfo,"user_id",user_id);
+    json_string(jsonInfo,"devs_id",devs_id);
+    json_boolean(jsonInfo,"magnet",magnet_chk);
+    json_boolean(jsonInfo,"pir",pir_chk);
+    json_close(jsonInfo);
+
+    // reset status on checking
+    magnet_chk = 0;
+    pir_chk = 0;
 }
 /** @} */

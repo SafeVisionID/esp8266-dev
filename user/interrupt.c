@@ -48,7 +48,7 @@ LOCAL uint8 gpio12_stt,gpio13_stt, gpio14_stt;
  * @brief GPIO Interrupt polling handler
  * @details All GPIO Interrupt response defined here
  */
-LOCAL void ICACHE_RODATA_ATTR gpio_poll_handler(){
+LOCAL void ICACHE_FLASH_ATTR gpio_poll_handler(){
     if( !(GPIO_INPUT_GET(GPIO_ID_PIN(MAGNET_INTRR_PINNUM))) ){
         if(gpio12_stt==0){
             os_printf_plus("MAGNET LEVEL Switched !!!\r\n");

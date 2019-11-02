@@ -26,6 +26,11 @@
 #define SERVER_LOCAL_PORT   3000
 
 /**
+ * @brief TCP server test response
+ */
+#define SERVER_RESP_TEST    1
+
+/**
  * @brief Request string position
  */
 #define STR_REQ     1
@@ -51,6 +56,12 @@ void user_tcpserver_init(uint32 port);
  * @details Chip will restarted after mode switching
  */
 void user_wifi_switch(void);
+
+/**
+ * @brief All Information in JSON Format
+ * @param[out] Informations JSON string
+ */
+void user_json_info(char* jsonInfo);
 
 #endif // HTTPD_H
 /** @} */
