@@ -26,9 +26,14 @@
 #define FLASH_START_ADDR    0x80
 
 /**
- * @brief Test Flash Length
+ * @brief Configs Flash memory start address
  */
-#define TEST_FLASH_STRLEN   8
+#define CONFIGS_FLASH_ADDR  FLASH_START_ADDR
+
+/**
+ * @brief Configs string length
+ */
+#define FLASH_CONFIGS_LEN   64
 
 /**
  * @brief Flash write integer
@@ -57,6 +62,15 @@ void rwflash_str_write(uint16 sec,char *src);
  * @param[out] String output
  */
 void rwflash_str_read(uint16 sec,char *des);
+
+/**
+ * @brief Flash configs string parse
+ * @details Split String by ";"
+ * @param[in] String Input.
+ * @param[out] Desired part string output
+ * @param[in] Position of desired string
+ */
+void rwflash_conf_parse(char *strIN, char *strOUT, uint8 num);
 
 #endif // RWFLASH_H
 /** @} */

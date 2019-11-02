@@ -28,7 +28,7 @@
 /**
  * @brief TCP server test response
  */
-#define SERVER_RESP_TEST    1
+#define SERVER_RESP_TEST    0
 
 /**
  * @brief Request string position

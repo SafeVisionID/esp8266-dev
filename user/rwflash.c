@@ -27,6 +27,8 @@
 
 #include "rwflash.h"
 
+char strConfigs[FLASH_CONFIGS_LEN];
+
 LOCAL void ICACHE_FLASH_ATTR rwflash_write(uint16 sec,uint32 *src){
     spi_flash_erase_sector(sec);
     spi_flash_write(sec * SPI_FLASH_SEC_SIZE, src, 4*sizeof(src));
@@ -50,5 +52,27 @@ void ICACHE_FLASH_ATTR rwflash_str_write(uint16 sec, char *src){
 
 void ICACHE_FLASH_ATTR rwflash_str_read(uint16 sec, char *des){
     rwflash_read(sec, (uint32 *)des);
+}
+
+void ICACHE_FLASH_ATTR rwflash_conf_parse(char *strIN, char *strOUT, uint8 num){
+    char strInput[FLASH_CONFIGS_LEN];
+    char strSplit[8][FLASH_CONFIGS_LEN/8];
+    uint8 i,j,cnt;
+
+    os_strcpy(strInput,strIN);
+    j=0; cnt=0;
+    for(i=0;i<=os_strlen(strInput);i++){
+        if(strInput[i]==' ' || strInput[i]=='\0' || strInput[i]==';'){
+            strSplit[cnt][j]='\0';
+            cnt++;
+            j=0;
+        }
+        else {
+            strSplit[cnt][j]=strInput[i];
+            j++;
+        }
+    }
+
+    os_strcpy(strOUT,strSplit[num]);
 }
 /** @} */
