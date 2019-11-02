@@ -246,11 +246,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             rwflash_str_write(FLASH_USERID_ADDR,user_id);
             os_printf("Write 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
-
-            os_memset(user_id, 0, 16);
-            rwflash_str_read(FLASH_USERID_ADDR,user_id);
-            os_printf("Read 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
-            os_printf("saved username: %s\r\n",user_id);
         }
         else if(os_strcmp("devsid",strReq)==0){
             tcp_conf_parse(strRecv,devs_id,STR_DATA);
@@ -261,11 +256,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
 
             rwflash_str_write(FLASH_DEVSID_ADDR,devs_id);
             os_printf("Write 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
-
-            os_memset(devs_id, 0, 16);
-            rwflash_str_read(FLASH_DEVSID_ADDR,devs_id);
-            os_printf("Read 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
-            os_printf("saved deviceid: %s\r\n",devs_id);
         }
         else if(os_strcmp("infosta",strReq)==0){
             wifi_station_get_config(&stationConf);
@@ -274,6 +264,20 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_printf("SSID: %s\r\nPASS: %s\r\n",stationConf.ssid,stationConf.password);
             os_sprintf(txthtml,"Station Mode Information with SSID: %s and PASS: %s",stationConf.ssid,stationConf.password);
             http_resp(pespconn,200,(char*)txthtml);
+        }
+        else if(os_strcmp("infouid",strReq)==0) {
+            os_memset(user_id, 0, 16);
+            rwflash_str_read(FLASH_USERID_ADDR,user_id);
+            os_printf("Read 0x%X sec: %s\r\n",FLASH_USERID_ADDR,user_id);
+            os_printf("saved username: %s\r\n",user_id);
+            http_resp(pespconn,200,NULL);
+        }
+        else if(os_strcmp("infodid",strReq)==0) {
+            os_memset(devs_id, 0, 16);
+            rwflash_str_read(FLASH_DEVSID_ADDR,devs_id);
+            os_printf("Read 0x%X sec: %s\r\n",FLASH_DEVSID_ADDR,devs_id);
+            os_printf("saved deviceid: %s\r\n",devs_id);
+            http_resp(pespconn,200,NULL);
         }
         else if(os_strcmp("jsoninfo",strReq)==0){
             user_json_info(json_resp);
