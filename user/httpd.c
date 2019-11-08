@@ -305,6 +305,10 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             json_open(json_resp);
             json_string(json_resp,"ssid",stationConf.ssid);
             json_string(json_resp,"pass",stationConf.password);
+
+            rwflash_strchk_empty(user_id);
+            rwflash_strchk_empty(devs_id);
+
             json_string(json_resp,"user_id",user_id);
             json_string(json_resp,"devs_id",devs_id);
             json_boolean(json_resp,"magnet",magnet_chk);

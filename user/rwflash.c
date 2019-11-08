@@ -75,4 +75,15 @@ void ICACHE_FLASH_ATTR rwflash_conf_parse(char *strIN, char *strOUT, uint8 num){
 
     os_strcpy(strOUT,strSplit[num]);
 }
+
+void ICACHE_FLASH_ATTR rwflash_strchk_empty(char *strData){
+    if(os_strlen(strData)<5){
+        os_printf("String length too short\r\n");
+        return;
+    }
+
+    if(strData[0]==255 && strData[1]==255 && strData[2]==255){
+        os_strcpy(strData,"");
+    }
+}
 /** @} */
