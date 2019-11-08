@@ -72,12 +72,5 @@ void rwflash_str_read(uint16 sec,char *des);
  */
 void rwflash_conf_parse(char *strIN, char *strOUT, uint8 num);
 
-/**
- * @brief Empty String from Flash Read
- * @details Empty if character at 0, 1, and 2 are 255
- * @param String data to check and emptying
- */
-void rwflash_strchk_empty(char *strData);
-
 #endif // RWFLASH_H
 /** @} */

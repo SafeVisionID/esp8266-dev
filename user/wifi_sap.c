@@ -28,7 +28,10 @@
 
 #include "httpd.h"
 #include "blinky.h"
+#include "rwflash.h"
 #include "wifi_sap.h"
+
+extern char strConfigs[FLASH_CONFIGS_LEN];
 
 /**
  * @brief Wifi SoftAP set IP Address
@@ -56,6 +59,8 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
  * @brief Wifi SoftAP configs
  */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
+    char devs_id[8];
+    char wifi_id[16];
     struct softap_config softapConf;
 
     os_memset(softapConf.ssid,0,32);
@@ -66,8 +71,15 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
     softapConf.ssid_len = 0;
     softapConf.authmode = AUTH_WPA2_PSK;
 
-    os_memcpy(softapConf.ssid,"SafeVisionID",12);
-    os_memcpy(softapConf.password,"safevision",10);
+    os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
+    rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
+    rwflash_conf_parse(strConfigs,devs_id,1);
+
+    if(os_strcmp(devs_id,"")==0){os_strcpy(wifi_id,"SafeVisionID");}
+    else{os_sprintf(wifi_id,"sv_%s",devs_id);}
+
+    os_strcpy(softapConf.ssid,wifi_id);
+    os_strcpy(softapConf.password,"safevision");
 
     user_wifi_softap_set_ip();
 
