@@ -205,6 +205,9 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     ptr = (char*) os_strstr(pusrdata,"\r\n");
     ptr[0] = '\0';
 
+    strcpy(user_id,"");
+    strcpy(devs_id,"");
+
 //===================================================================
 // Define all HTTP request here
 

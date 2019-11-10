@@ -39,8 +39,14 @@
 #include "user_interface.h"
 
 #include "analog.h"
+#include "rwflash.h"
+#include "interrupt.h"
+#include "json.h"
 
 extern UartDevice    UartDev;
+extern char strConfigs[FLASH_CONFIGS_LEN];
+extern uint8 magnet_chk;
+extern uint8 pir_chk;
 
 /**
  * @brief UART receive buffer size
@@ -215,49 +221,129 @@ uart0_rx_intr_handler(void *para)
 }
 
 /**
+ * @brief UART config parse
+ * @details Split String by "/"
+ * @param[in] String Input
+ * @param[out] Desired part string output
+ * @param[in] Position of desired string
+ */
+LOCAL void ICACHE_FLASH_ATTR uart_conf_parse(char *strIN, char *strOUT, uint8 num){
+    char strInput[90];
+    char strSplit[3][30];
+    uint8 i,j,cnt;
+
+    os_strcpy(strInput,strIN);
+    j=0; cnt=0;
+    for(i=0;i<=os_strlen(strInput);i++){
+        if(strInput[i]==' ' || strInput[i]=='\0'){
+            strSplit[cnt][j]='\0';
+            cnt++;
+            j=0;
+        }
+        else {
+            strSplit[cnt][j]=strInput[i];
+            j++;
+        }
+    }
+
+    os_strcpy(strOUT,strSplit[num]);
+}
+
+/**
  * @brief UART response callback
  * @details Callback Function not called directly
  * @param[in] Character from receive buffer
  */
 LOCAL void ICACHE_FLASH_ATTR
 uart_response(uint8 inChar){
+    char strReq[32];
+    char user_id[8];
+    char devs_id[8];
+    struct station_config stationConf;
+    char json_resp[64];
+
+    strcpy(user_id,"");
+    strcpy(devs_id,"");
+
     if(inChar == '\n' || inChar == '\r'){
 
         // Here are request string responses
         if(uart_rx_send == 0){
             uart0_sendStr("\r\n");
 
-            if(os_strcmp(uart_rx_buffer,"test")==0){
+            uart_conf_parse(uart_rx_buffer,strReq,0);
+
+            if(os_strcmp(strReq,"test")==0){
                 uart0_sendStr("What to test?\r\n");
             }
-            else if(os_strcmp(uart_rx_buffer,"sdk")==0){
+            else if(os_strcmp(strReq,"sdk")==0){
                 os_printf("[INFO] SDK: %s\r\n", system_get_sdk_version());
             }
-            else if(os_strcmp(uart_rx_buffer,"chip")==0){
+            else if(os_strcmp(strReq,"chip")==0){
                 os_printf("[INFO] Chip ID: %08X\r\n", system_get_chip_id());
             }
-            else if(os_strcmp(uart_rx_buffer,"when")==0){
+            else if(os_strcmp(strReq,"when")==0){
                 os_printf("[INFO] Compiled at %s %s\r\n", __DATE__,__TIME__);
             }
-            else if(os_strcmp(uart_rx_buffer,"fcpu")==0){
+            else if(os_strcmp(strReq,"fcpu")==0){
                 os_printf("[INFO] CPU Freq: %d MHz\r\n", system_get_cpu_freq());
             }
-            else if(os_strcmp(uart_rx_buffer,"mems")==0){
+            else if(os_strcmp(strReq,"mems")==0){
                 os_printf("[INFO] Memory Info:\r\n"); system_print_meminfo();
             }
-            else if(os_strcmp(uart_rx_buffer,"adc")==0){
+            else if(os_strcmp(strReq,"adc")==0){
                 vadc = user_get_adc();
                 os_printf("[INFO] ADC Input: %4d\r\n",vadc);
             }
-            else if(os_strcmp(uart_rx_buffer,"sleep")==0){
+            else if(os_strcmp(strReq,"sleep")==0){
                 os_printf("[INFO] Entering Deep Sleep\r\n");
                 system_deep_sleep_set_option(0);
                 system_deep_sleep(10*vsleep); // 10s
             }
+            else if(os_strcmp(strReq,"devsid")==0){
+                uart_conf_parse(uart_rx_buffer,devs_id,1);
+                os_printf("[INFO] new deviceid: %s\r\n",devs_id);
+
+                os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
+                rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
+                rwflash_conf_parse(strConfigs,user_id,0);
+
+                os_sprintf(strConfigs,"%s;%s",user_id,devs_id);
+                rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
+            }
+            else if(os_strcmp(strReq,"jsoninfo")==0){
+                os_printf("Building JSON info \r\n");
+
+                wifi_station_get_config(&stationConf);
+
+                os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
+                rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
+                rwflash_conf_parse(strConfigs,user_id,0);
+                rwflash_conf_parse(strConfigs,devs_id,1);
+
+                json_open(json_resp);
+                json_string(json_resp,"ssid",stationConf.ssid);
+                json_string(json_resp,"pass",stationConf.password);
+                json_string(json_resp,"user_id",user_id);
+                json_string(json_resp,"devs_id",devs_id);
+                json_boolean(json_resp,"magnet",magnet_chk);
+                json_boolean(json_resp,"pir",pir_chk);
+                json_close(json_resp);
+
+                // reset status on checking
+                magnet_chk = 0;
+                pir_chk = 0;
+
+                os_printf("JSON Data: %s\r\n",json_resp);
+            }
+            else if(os_strcmp("restart",strReq)==0){
+                uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+                system_restart();
+            }
             else{
-                os_strcat(uart_rx_buffer,"\r\n");
+                os_strcat(strReq,"\r\n");
                 uart0_sendStr("Serial Data is ");
-                uart0_sendStr(uart_rx_buffer);
+                uart0_sendStr(strReq);
             }
 
             os_memset(uart_rx_buffer,0,sizeof(uart_rx_buffer));

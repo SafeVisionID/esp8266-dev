@@ -57,12 +57,12 @@ LOCAL void ICACHE_FLASH_ATTR rwflash_read(uint16 sec,uint32 *des){
  * @param String data to check and emptying
  */
 LOCAL void ICACHE_FLASH_ATTR rwflash_strchk_empty(char *strData){
-    if(os_strlen(strData)<3){
+    if(os_strlen(strData)<2){
         os_printf("String length too short\r\n");
         return;
     }
 
-    if(strData[0]==255 && strData[1]==255 && strData[2]==255){
+    if(strData[0]==255 && strData[1]==255){
         os_strcpy(strData,"");
     }
 }

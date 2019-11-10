@@ -34,6 +34,8 @@ FW_FILE_1=${WORKDIR}/${FW_FILE_1_ADDR}.bin
 FW_FILE_2=${WORKDIR}/${FW_FILE_2_ADDR}.bin
 
 make all
-${ROOTING} ${ESPTOOL} --port ${ESPPORT} erase_flash
-${ROOTING} ${ESPTOOL} --port ${ESPPORT} write_flash ${BLANK_1_ADDR} ${BLANKBIN} ${INIT_2_ADDR} ${INITBIN} ${BLANK_2_ADDR} ${BLANKBIN}
-${ROOTING} ${ESPTOOL} --port ${ESPPORT} write_flash ${FW_FILE_1_ADDR} ${FW_FILE_1} ${FW_FILE_2_ADDR} ${FW_FILE_2}
+if [ $? -eq 0 ];then
+	${ROOTING} ${ESPTOOL} --port ${ESPPORT} erase_flash
+	${ROOTING} ${ESPTOOL} --port ${ESPPORT} write_flash ${BLANK_1_ADDR} ${BLANKBIN} ${INIT_2_ADDR} ${INITBIN} ${BLANK_2_ADDR} ${BLANKBIN}
+	${ROOTING} ${ESPTOOL} --port ${ESPPORT} write_flash ${FW_FILE_1_ADDR} ${FW_FILE_1} ${FW_FILE_2_ADDR} ${FW_FILE_2}
+fi
