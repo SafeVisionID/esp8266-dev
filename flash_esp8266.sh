@@ -1,21 +1,34 @@
 #!/bin/bash
 
 WORKDIR=$(pwd)/firmware/
-ROOTING=sudo
-ESPTOOL=esptool
-ESPPORT=/dev/ttyUSB0
+UNIX_OS=$(lsb_release -i | cut -f2)
+
+if [ $UNIX_OS == "Arch" ];then
+	ESP_SDK_BIN=/opt/esp-open-sdk/sdk/bin/
+	ROOTING=sudo
+	ESPTOOL=esptool
+	ESPPORT=/dev/ttyUSB0
+	
+elif [ $UNIX_OS = "Ubuntu" ];then
+	echo "Ubuntu not supported yet"
+	exit
+elif [ $UNIX_OS = "Debian" ];then
+	echo "Debian not supported yet"
+	exit
+elif [ $UNIX_OS = "MacOS" ];then
+	echo "MacOS not supported yet"
+	exit	
+fi
 
 BLANK_1_ADDR=0x3e000
 INIT_2_ADDR=0x3fc000
 BLANK_2_ADDR=0x3fe000
 
-ESP_SDK_BIN=/opt/esp-open-sdk/sdk/bin/
+FW_FILE_1_ADDR=0x00000
+FW_FILE_2_ADDR=0x10000
 
 INITBIN=${ESP_SDK_BIN}/esp_init_data_default.bin
 BLANKBIN=${ESP_SDK_BIN}/blank.bin
-
-FW_FILE_1_ADDR=0x00000
-FW_FILE_2_ADDR=0x10000
 
 FW_FILE_1=${WORKDIR}/${FW_FILE_1_ADDR}.bin
 FW_FILE_2=${WORKDIR}/${FW_FILE_2_ADDR}.bin
