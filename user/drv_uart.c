@@ -302,9 +302,11 @@ uart_response(uint8 inChar){
 
                 os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
                 rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
-                rwflash_conf_parse(strConfigs,user_id,0);
+                os_printf("String Config get: %s\r\n",strConfigs);
+                rwflash_conf_parse(strConfigs,user_id,FLASH_USERID);
 
-                os_sprintf(strConfigs,"%s;%s",user_id,devs_id);
+                os_sprintf(strConfigs,"/%s/%s",user_id,devs_id);
+                os_printf("String Config set: %s\r\n",strConfigs);
                 rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
             }
             else if(os_strcmp(strReq,"jsoninfo")==0){

@@ -35,8 +35,13 @@
  */
 #define FLASH_CONFIGS_LEN   64
 
-#define FLASH_USERID 0
-#define FLASH_DEVSID 1
+/**
+ * @brief Configs string numbers
+ */
+#define FLASH_CONFIGS_NUM   4
+
+#define FLASH_USERID 1
+#define FLASH_DEVSID 2
 
 /**
  * @brief Flash write integer
@@ -68,7 +73,7 @@ void rwflash_str_read(uint16 sec,char *des);
 
 /**
  * @brief Flash configs string parse
- * @details Split String by ";"
+ * @details Split String by ","
  * @param[in] String Input.
  * @param[out] Desired part string output
  * @param[in] Position of desired string

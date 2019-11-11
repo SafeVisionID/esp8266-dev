@@ -263,10 +263,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             http_resp(pespconn,200,(char*)txthtml);
 
             rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
+            os_printf("String Config get: %s\r\n",strConfigs);
             rwflash_conf_parse(strConfigs,devs_id,FLASH_DEVSID);
 
-            os_sprintf(strConfigs,"%s,%s",user_id,devs_id);
-            os_printf("String Config: %s\r\n",strConfigs);
+            os_sprintf(strConfigs,"/%s/%s",user_id,devs_id);
+            os_printf("String Config set: %s\r\n",strConfigs);
             rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
         }
         else if(os_strcmp("devsid",strReq)==0){
@@ -277,10 +278,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             http_resp(pespconn,200,(char*)txthtml);
 
             rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
+            os_printf("String Config get: %s\r\n",strConfigs);
             rwflash_conf_parse(strConfigs,user_id,FLASH_USERID);
 
-            os_sprintf(strConfigs,"%s,%s",user_id,devs_id);
-            os_printf("String Config: %s\r\n",strConfigs);
+            os_sprintf(strConfigs,"/%s/%s",user_id,devs_id);
+            os_printf("String Config set: %s\r\n",strConfigs);
             rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
         }
         else if(os_strcmp("infosta",strReq)==0){
