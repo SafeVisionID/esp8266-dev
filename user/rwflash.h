@@ -40,7 +40,21 @@
  */
 #define FLASH_CONFIGS_NUM   4
 
+/**
+ * @brief Configs string size
+ * @details Should not filled by out of size string and
+ *          no more than FLASH_CONFIGS_LEN/FLASH_CONFIGS_NUM
+ */
+#define FLASH_STRING_BUFF   12
+
+/**
+ * @brief UserID string position
+ */
 #define FLASH_USERID 1
+
+/**
+ * @brief DeviceID string position
+ */
 #define FLASH_DEVSID 2
 
 /**

@@ -59,8 +59,8 @@ void json_boolean(char* strJSON, char* field, uint8 value){
 }
 
 void json_infoall(char *strJSON){
-    char user_id[8];
-    char devs_id[8];
+    char user_id[FLASH_STRING_BUFF];
+    char devs_id[FLASH_STRING_BUFF];
     struct station_config stationConf;
 
     wifi_station_get_config(&stationConf);
@@ -81,7 +81,5 @@ void json_infoall(char *strJSON){
     // reset sensor status on checking
     magnet_chk = 0;
     pir_chk = 0;
-
-    os_printf("String from Flash: %s\r\n",strConfigs);
 }
 /** @} */

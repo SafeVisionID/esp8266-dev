@@ -2,6 +2,7 @@
 
 WORKDIR=$(pwd)/firmware/
 UNIX_OS=$(lsb_release -i | cut -f2)
+SERTERM=minicom
 
 if [ $UNIX_OS == "Arch" ];then
 	ESP_SDK_BIN=/opt/esp-open-sdk/sdk/bin/
@@ -39,4 +40,5 @@ if [ $? -eq 0 ];then
 	${ROOTING} ${ESPTOOL} --port ${ESPPORT} erase_flash
 	${ROOTING} ${ESPTOOL} --port ${ESPPORT} write_flash ${BLANK_1_ADDR} ${BLANKBIN} ${INIT_2_ADDR} ${INITBIN} ${BLANK_2_ADDR} ${BLANKBIN}
 	${ROOTING} ${ESPTOOL} --port ${ESPPORT} write_flash ${FW_FILE_1_ADDR} ${FW_FILE_1} ${FW_FILE_2_ADDR} ${FW_FILE_2}
+	${ROOTING} ${SERTERM} -b 9600 -D ${ESPPORT}
 fi

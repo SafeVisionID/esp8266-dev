@@ -59,7 +59,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_set_ip(void){
  * @brief Wifi SoftAP configs
  */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
-    char devs_id[8];
+    char devs_id[FLASH_STRING_BUFF];
     char wifi_id[16];
 
     struct softap_config softapConf;
@@ -79,6 +79,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_softap_conf(void){
     else{os_sprintf(wifi_id,"sv_%s",devs_id);}
 
     os_strcpy(softapConf.ssid,wifi_id);
+    os_printf("WiFi SSID: %s\r\n",wifi_id);
     os_strcpy(softapConf.password,"safevision");
 
     user_wifi_softap_set_ip();

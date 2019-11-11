@@ -255,11 +255,25 @@ LOCAL void ICACHE_FLASH_ATTR uart_conf_parse(char *strIN, char *strOUT, uint8 nu
 LOCAL void ICACHE_FLASH_ATTR
 uart_response(uint8 inChar){
     char strReq[32];
-    char user_id[8];
-    char devs_id[8];
-    struct station_config stationConf;
+    char user_id[FLASH_STRING_BUFF];
+    char devs_id[FLASH_STRING_BUFF];
 
     char json_resp[JSON_RESP_LEN];
+
+    const char cmdlist[]= "commands: "\
+            "test "\
+            "sdk "\
+            "chip "\
+            "when "\
+            "fcpu "\
+            "mems "\
+            "adc "\
+            "sleep "\
+            "devsid "\
+            "jsoninfo "\
+            "restart "\
+            "switch "\
+            "help";
 
     if(inChar == '\n' || inChar == '\r'){
 
@@ -298,16 +312,22 @@ uart_response(uint8 inChar){
             }
             else if(os_strcmp(strReq,"devsid")==0){
                 uart_conf_parse(uart_rx_buffer,devs_id,1);
-                os_printf("[INFO] new deviceid: %s\r\n",devs_id);
 
-                os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
-                rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
-                os_printf("String Config get: %s\r\n",strConfigs);
-                rwflash_conf_parse(strConfigs,user_id,FLASH_USERID);
+                if(os_strcmp(devs_id,"")==0){
+                    os_printf("usage: devsid <10-chars unique permutation>\r\n");
+                }
+                else{
+                    os_printf("[INFO] new deviceid: %s\r\n",devs_id);
 
-                os_sprintf(strConfigs,"/%s/%s",user_id,devs_id);
-                os_printf("String Config set: %s\r\n",strConfigs);
-                rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
+                    os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
+                    rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
+                    os_printf("String Config get: %s\r\n",strConfigs);
+                    rwflash_conf_parse(strConfigs,user_id,FLASH_USERID);
+
+                    os_sprintf(strConfigs,"/%s/%s",user_id,devs_id);
+                    os_printf("String Config set: %s\r\n",strConfigs);
+                    rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
+                }
             }
             else if(os_strcmp(strReq,"jsoninfo")==0){
                 os_printf("Building JSON info \r\n");
@@ -317,6 +337,13 @@ uart_response(uint8 inChar){
             else if(os_strcmp("restart",strReq)==0){
                 uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
                 system_restart();
+            }
+            else if(os_strcmp("switch",strReq)==0){
+                uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+                user_wifi_switch();
+            }
+            else if(os_strcmp("help",strReq)==0){
+                os_printf("%s\r\n",cmdlist);
             }
             else{
                 os_strcat(strReq,"\r\n");

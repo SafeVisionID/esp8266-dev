@@ -89,11 +89,13 @@ void ICACHE_FLASH_ATTR rwflash_int_read(uint16 sec, uint16 *des){
 }
 
 void ICACHE_FLASH_ATTR rwflash_str_write(uint16 sec, char *src){
+    os_printf("Write String: %s\r\n",src);
     rwflash_write(sec, (uint32 *)src);
 }
 
 void ICACHE_FLASH_ATTR rwflash_str_read(uint16 sec, char *des){
     rwflash_read(sec, (uint32 *)des);
+    os_printf("Read String: %s\r\n",des);
 }
 
 void ICACHE_FLASH_ATTR rwflash_conf_parse(char *strIN, char *strOUT, uint8 num){
