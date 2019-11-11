@@ -35,6 +35,9 @@
  */
 #define FLASH_CONFIGS_LEN   64
 
+#define FLASH_USERID 0
+#define FLASH_DEVSID 1
+
 /**
  * @brief Flash write integer
  * @param[in] Write Address

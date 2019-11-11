@@ -33,6 +33,7 @@ BLANKBIN=${ESP_SDK_BIN}/blank.bin
 FW_FILE_1=${WORKDIR}/${FW_FILE_1_ADDR}.bin
 FW_FILE_2=${WORKDIR}/${FW_FILE_2_ADDR}.bin
 
+make clean
 make all
 if [ $? -eq 0 ];then
 	${ROOTING} ${ESPTOOL} --port ${ESPPORT} erase_flash

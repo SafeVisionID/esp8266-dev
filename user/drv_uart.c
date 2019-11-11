@@ -43,10 +43,8 @@
 #include "interrupt.h"
 #include "json.h"
 
-extern UartDevice    UartDev;
+extern UartDevice UartDev;
 extern char strConfigs[FLASH_CONFIGS_LEN];
-extern uint8 magnet_chk;
-extern uint8 pir_chk;
 
 /**
  * @brief UART receive buffer size
@@ -260,10 +258,8 @@ uart_response(uint8 inChar){
     char user_id[8];
     char devs_id[8];
     struct station_config stationConf;
-    char json_resp[64];
 
-    strcpy(user_id,"");
-    strcpy(devs_id,"");
+    char json_resp[JSON_RESP_LEN];
 
     if(inChar == '\n' || inChar == '\r'){
 
@@ -313,27 +309,7 @@ uart_response(uint8 inChar){
             }
             else if(os_strcmp(strReq,"jsoninfo")==0){
                 os_printf("Building JSON info \r\n");
-
-                wifi_station_get_config(&stationConf);
-
-                os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
-                rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
-                rwflash_conf_parse(strConfigs,user_id,0);
-                rwflash_conf_parse(strConfigs,devs_id,1);
-
-                json_open(json_resp);
-                json_string(json_resp,"ssid",stationConf.ssid);
-                json_string(json_resp,"pass",stationConf.password);
-                json_string(json_resp,"user_id",user_id);
-                json_string(json_resp,"devs_id",devs_id);
-                json_boolean(json_resp,"magnet",magnet_chk);
-                json_boolean(json_resp,"pir",pir_chk);
-                json_close(json_resp);
-
-                // reset status on checking
-                magnet_chk = 0;
-                pir_chk = 0;
-
+                json_infoall(json_resp);
                 os_printf("JSON Data: %s\r\n",json_resp);
             }
             else if(os_strcmp("restart",strReq)==0){

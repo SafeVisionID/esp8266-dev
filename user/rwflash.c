@@ -28,7 +28,10 @@
 #include "rwflash.h"
 
 /**
- * @brief String Configs buffer
+ * @brief Global string variable for flash storage data
+ * @details Somehow it can only one variable for each address
+ *          and because I'm to lazy to calculate address space,
+ *          so I use one address only
  */
 char strConfigs[FLASH_CONFIGS_LEN];
 
@@ -57,13 +60,15 @@ LOCAL void ICACHE_FLASH_ATTR rwflash_read(uint16 sec,uint32 *des){
  * @param String data to check and emptying
  */
 LOCAL void ICACHE_FLASH_ATTR rwflash_strchk_empty(char *strData){
-    if(os_strlen(strData)<2){
-        os_printf("String length too short\r\n");
-        return;
-    }
-
-    if(strData[0]==255 && strData[1]==255){
+    if(os_strlen(strData)<=3){
         os_strcpy(strData,"");
+        os_printf("String emptied because too short\r\n");
+    }
+    else{
+        if(strData[0]==255 && strData[1]==255 && strData[2]==255){
+            os_strcpy(strData,"");
+            os_printf("String emptied because only null\r\n");
+        }
     }
 }
 
@@ -88,22 +93,27 @@ void ICACHE_FLASH_ATTR rwflash_conf_parse(char *strIN, char *strOUT, uint8 num){
     char strSplit[8][FLASH_CONFIGS_LEN/8];
     uint8 i,j,cnt;
 
-    os_strcpy(strInput,strIN);
-    j=0; cnt=0;
-    for(i=0;i<=os_strlen(strInput);i++){
-        if(strInput[i]==' ' || strInput[i]=='\0' || strInput[i]==';'){
-            strSplit[cnt][j]='\0';
-            cnt++;
-            j=0;
-        }
-        else {
-            strSplit[cnt][j]=strInput[i];
-            j++;
-        }
-    }
+    rwflash_strchk_empty(strIN);
 
-    os_strcpy(strOUT,strSplit[num]);
-    rwflash_strchk_empty(strOUT);
+    if(os_strlen(strIN)>0){
+        os_strcpy(strInput,strIN);
+        j=0; cnt=0;
+        for(i=0;i<=os_strlen(strInput);i++){
+            if(strInput[i]='\0' || strInput[i]==','){
+                strSplit[cnt][j]='\0';
+                cnt++;
+                j=0;
+            }
+            else {
+                strSplit[cnt][j]=strInput[i];
+                j++;
+            }
+        }
+        os_strcpy(strOUT,strSplit[num]);
+    }
+    else{
+        os_strcpy(strOUT,"");
+    }
 }
 
 /** @} */

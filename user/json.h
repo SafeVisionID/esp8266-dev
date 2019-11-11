@@ -21,6 +21,11 @@
 #define JSON_H
 
 /**
+ * @brief Global Standard for JSON response length
+ */
+#define JSON_RESP_LEN   256
+
+/**
  * @brief JSON start string "{"
  * @param[in] String buffer
  */
@@ -47,6 +52,12 @@ void json_string(char* strJSON, char* field, char* value);
  * @param[in] Boolean value
  */
 void json_boolean(char* strJSON, char* field, uint8 value);
+
+/**
+ * @brief JSON information
+ * @param[out] String JSON contain all informations
+ */
+void json_infoall(char* strJSON);
 
 #endif // JSON_H
 /** @} */

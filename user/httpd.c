@@ -32,7 +32,6 @@
 #include "rwflash.h"
 #include "json.h"
 
-extern uint8 magnet_chk,pir_chk;
 extern char strConfigs[FLASH_CONFIGS_LEN];
 
 /**
@@ -199,14 +198,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
     char buffstr[8];
 #endif
 
-    char json_resp[64];
+    char json_resp[JSON_RESP_LEN];
     struct espconn *pespconn = arg;
 
     ptr = (char*) os_strstr(pusrdata,"\r\n");
     ptr[0] = '\0';
-
-    strcpy(user_id,"");
-    strcpy(devs_id,"");
 
 //===================================================================
 // Define all HTTP request here
@@ -266,11 +262,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_sprintf(txthtml,"new username: %s",user_id);
             http_resp(pespconn,200,(char*)txthtml);
 
-            os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
             rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
-            rwflash_conf_parse(strConfigs,devs_id,1);
+            rwflash_conf_parse(strConfigs,devs_id,FLASH_DEVSID);
 
-            os_sprintf(strConfigs,"%s;%s",user_id,devs_id);
+            os_sprintf(strConfigs,"%s,%s",user_id,devs_id);
+            os_printf("String Config: %s\r\n",strConfigs);
             rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
         }
         else if(os_strcmp("devsid",strReq)==0){
@@ -280,11 +276,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
             os_sprintf(txthtml,"new deviceid: %s",devs_id);
             http_resp(pespconn,200,(char*)txthtml);
 
-            os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
             rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
-            rwflash_conf_parse(strConfigs,user_id,0);
+            rwflash_conf_parse(strConfigs,user_id,FLASH_USERID);
 
-            os_sprintf(strConfigs,"%s;%s",user_id,devs_id);
+            os_sprintf(strConfigs,"%s,%s",user_id,devs_id);
+            os_printf("String Config: %s\r\n",strConfigs);
             rwflash_str_write(CONFIGS_FLASH_ADDR,strConfigs);
         }
         else if(os_strcmp("infosta",strReq)==0){
@@ -297,29 +293,9 @@ LOCAL void ICACHE_FLASH_ATTR tcp_server_recv_cb(void *arg,char *pusrdata, unsign
         }
         else if(os_strcmp("jsoninfo",strReq)==0){
             os_printf("Building JSON info \r\n");
-
-            wifi_station_get_config(&stationConf);
-
-            os_memset(strConfigs,0,FLASH_CONFIGS_LEN);
-            rwflash_str_read(CONFIGS_FLASH_ADDR,strConfigs);
-            rwflash_conf_parse(strConfigs,user_id,0);
-            rwflash_conf_parse(strConfigs,devs_id,1);
-
-            json_open(json_resp);
-            json_string(json_resp,"ssid",stationConf.ssid);
-            json_string(json_resp,"pass",stationConf.password);
-            json_string(json_resp,"user_id",user_id);
-            json_string(json_resp,"devs_id",devs_id);
-            json_boolean(json_resp,"magnet",magnet_chk);
-            json_boolean(json_resp,"pir",pir_chk);
-            json_close(json_resp);
-
-            // reset status on checking
-            magnet_chk = 0;
-            pir_chk = 0;
-
-            http_resp(pespconn,200,json_resp);
+            json_infoall(json_resp);
             os_printf("JSON Data: %s\r\n",json_resp);
+            http_resp(pespconn,200,json_resp);
         }
         else if(os_strcmp("switch",strReq)==0){
             http_resp(pespconn,200,NULL);
