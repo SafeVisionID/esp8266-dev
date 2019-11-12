@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ESP8266 GUI Helper</string>
+   <string>ESP8266 Helper GUI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QGroupBox" name="Firmware">
@@ -29,7 +29,7 @@
     <widget class="QPushButton" name="btnFirmRebuild">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>200</y>
        <width>121</width>
        <height>27</height>
@@ -303,7 +303,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="ESPtool">
      <property name="geometry">
       <rect>
        <x>500</x>
@@ -326,19 +326,6 @@
       </property>
       <property name="text">
        <string>Rooting</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="txtESProot">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>50</y>
-        <width>81</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
       </property>
      </widget>
      <widget class="QLineEdit" name="txtESPport">
@@ -387,11 +374,59 @@
        <string>Device Port</string>
       </property>
      </widget>
+     <widget class="QComboBox" name="cmbESProot">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>78</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <item>
+       <property name="text">
+        <string>none</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>sudo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>su</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>gksudo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>gksu</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>kdesudo</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>kdesu</string>
+       </property>
+      </item>
+     </widget>
     </widget>
     <widget class="QPushButton" name="btnFirmUpload">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>150</x>
        <y>200</y>
        <width>121</width>
        <height>27</height>
@@ -399,6 +434,19 @@
      </property>
      <property name="text">
       <string>Upload Firmware</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnFirmClean">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>200</y>
+       <width>121</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Clean-Up Firmware</string>
      </property>
     </widget>
    </widget>
@@ -422,6 +470,9 @@
        <width>291</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QLabel" name="lblServReq">
@@ -459,6 +510,9 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QPushButton" name="btnSetDevID">
      <property name="geometry">
@@ -494,6 +548,9 @@
        <width>291</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="btnConfirm">
@@ -543,6 +600,9 @@
        <width>291</width>
        <height>23</height>
       </rect>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="btnChkDevID">
@@ -719,15 +779,13 @@
        <height>241</height>
       </rect>
      </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
     </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionExit">
-   <property name="text">
-    <string>Exit</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

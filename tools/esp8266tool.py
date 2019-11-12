@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import subprocess as sp
 from pathlib import Path
@@ -37,13 +38,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.txtAddrUser1.setText(self.AddrUser1)
         self.txtAddrUser2.setText(self.AddrUser2)
         
-        self.txtESProot.setText('sudo')
         self.txtESPtool.setText('esptool')
         self.txtESPport.setText('/dev/ttyUSB0')
         
         self.serial = QSerialPort(self)
         
         self.setFixedSize(self.width(),self.height())
+        
+    def closeEvent(self, event):
+        if self.serial.isOpen:
+            self.serial.close()
+        os.system('rm -rf __pycache__/')
+        os.system('rm -f Ui_esp8266tool.py')
+        print("Program closed")
          
     def get_lsb(self):
         lsb = sp.Popen('lsb_release -i | cut -f2', shell=True,stdout=sp.PIPE)
@@ -99,11 +106,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             print("New build completed")
 
         self.setEnabled(True)
+        
+    @pyqtSlot()
+    def on_btnFirmClean_clicked(self):
+        self.setEnabled(False)      
+        makeclean = sp.Popen(['make','clean'], cwd=self.WorkDirPath)
+        output,error = makeclean.communicate()
+        retcode = makeclean.returncode
+        if retcode!=0:
+            self.statusBar.clearMessage()
+            self.statusBar.showMessage("'make clean' failed")
+            self.setEnabled(True)
+            return
+        else:
+            self.statusBar.clearMessage()
+            self.statusBar.showMessage("'make clean' success")
+            print("Previous build cleaned up")
+        self.setEnabled(True)
             
     @pyqtSlot()
     def on_btnFirmUpload_clicked(self):
         self.setEnabled(False)
-        rooting = self.txtESProot.text()
+        rooting = self.cmbESProot.currentText()
+        if rooting=='none':
+            rooting=''
         esptool = self.txtESPtool.text()
         espport = self.txtESPport.text()
         
@@ -186,7 +212,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 print("Success connect on %s" % port)
                 self.btnConnect.setText('Disconnect') 
             else:
-                raise IOError("Cannot connect to device on port %s" % port) 
+                print("Cannot connect to device on port %s" % port) 
         else:
             if self.serial.isOpen():
                 self.serial.close()
