@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKDIR=$(pwd)/firmware/
+WORKDIR=$(pwd)/../firmware/
 UNIX_OS=$(lsb_release -i | cut -f2)
 SERTERM=minicom
 
