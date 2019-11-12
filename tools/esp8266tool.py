@@ -1,29 +1,18 @@
 # -*- coding: utf-8 -*-
 
-"""
-Module implementing MainWindow.
-"""
-
 import sys
 import subprocess as sp
 from pathlib import Path
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtSerialPort import QSerialPort
+from PyQt5.QtCore import pyqtSlot, QIODevice
 
 from Ui_esp8266tool import Ui_MainWindow
 
 class MainWindow(QMainWindow, Ui_MainWindow):
-    """
-    Class documentation goes here.
-    """
     def __init__(self, parent=None):
-        """
-        Constructor
-        
-        @param parent reference to the parent widget
-        @type QWidget
-        """
         super(MainWindow, self).__init__(parent)
         self.setupUi(self)
         
@@ -51,6 +40,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.txtESProot.setText('sudo')
         self.txtESPtool.setText('esptool')
         self.txtESPport.setText('/dev/ttyUSB0')
+        
+        self.serial = QSerialPort(self)
         
         self.setFixedSize(self.width(),self.height())
          
@@ -82,9 +73,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     
     @pyqtSlot()
     def on_btnFirmRebuild_clicked(self):
-        """
-        Slot documentation goes here.
-        """
         self.setEnabled(False)      
         makeclean = sp.Popen(['make','clean'], cwd=self.WorkDirPath)
         output,error = makeclean.communicate()
@@ -114,9 +102,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             
     @pyqtSlot()
     def on_btnFirmUpload_clicked(self):
-        """
-        Slot documentation goes here.
-        """
         self.setEnabled(False)
         rooting = self.txtESProot.text()
         esptool = self.txtESPtool.text()
@@ -186,3 +171,59 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.statusBar.showMessage("'upload firmware' success")
 
         self.setEnabled(True)
+
+    @pyqtSlot()
+    def on_btnConnect_clicked(self):
+        port = self.txtESPport.text()
+        baud = self.cmbBaud.currentText()
+        
+        self.serial.setPortName(port)
+        self.serial.setBaudRate(int(baud))
+        
+        if self.btnConnect.text()=='Connect':
+            if self.serial.open(QIODevice.ReadWrite):
+                self.serial.readyRead.connect(self.on_serial_read)
+                print("Success connect on %s" % port)
+                self.btnConnect.setText('Disconnect') 
+            else:
+                raise IOError("Cannot connect to device on port %s" % port) 
+        else:
+            if self.serial.isOpen():
+                self.serial.close()
+                print("Port %s disconnected" % port)
+                self.btnConnect.setText('Connect') 
+        
+    def on_serial_read(self):
+        strData = str(self.serial.readAll(),encoding='utf8',errors='ignore').rstrip('\r')
+        self.txtConsole.insertPlainText(strData)
+        self.txtConsole.moveCursor(QTextCursor.End)
+        
+    def serial_request(self,strReq):
+        strData = bytes(strReq+'\n',encoding='utf8')
+        if not self.serial.isOpen():
+            return
+        self.serial.write(strData)
+        
+    @pyqtSlot()
+    def on_btnClear_clicked(self):
+        self.txtConsole.clear()
+
+    @pyqtSlot()
+    def on_btnInfoSystem_clicked(self):
+        self.serial_request('sysinfo')
+        
+    @pyqtSlot()
+    def on_btnInfoJSON_clicked(self):
+        self.serial_request('jsoninfo')
+        
+    @pyqtSlot()
+    def on_btnRestart_clicked(self):
+        self.serial_request('restart')
+        
+    @pyqtSlot()
+    def on_btnSwitch_clicked(self):
+        self.serial_request('switch')
+        
+        
+        
+        

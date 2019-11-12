@@ -254,6 +254,8 @@ LOCAL void ICACHE_FLASH_ATTR uart_conf_parse(char *strIN, char *strOUT, uint8 nu
  */
 LOCAL void ICACHE_FLASH_ATTR
 uart_response(uint8 inChar){
+    uint8 i;
+    uint8 bootmode;
     char strReq[32];
     char user_id[FLASH_STRING_BUFF];
     char devs_id[FLASH_STRING_BUFF];
@@ -273,6 +275,7 @@ uart_response(uint8 inChar){
             "jsoninfo "\
             "restart "\
             "switch "\
+            "sysinfo"\
             "help";
 
     if(inChar == '\n' || inChar == '\r'){
@@ -335,12 +338,31 @@ uart_response(uint8 inChar){
                 os_printf("JSON Data: %s\r\n",json_resp);
             }
             else if(os_strcmp("restart",strReq)==0){
-                uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+                for(i=0;i<100;i++){os_delay_us(10000);}
                 system_restart();
             }
             else if(os_strcmp("switch",strReq)==0){
-                uint8 i;for(i=0;i<100;i++){os_delay_us(10000);}
+                for(i=0;i<100;i++){os_delay_us(10000);}
                 user_wifi_switch();
+            }
+            else if(os_strcmp("sysinfo",strReq)==0){
+                os_printf("\r\n\r\n[INFO] -------------------------------------------\r\n");
+
+                os_printf("[INFO] Compiled at %s %s\r\n", __DATE__,__TIME__);
+                os_printf("[INFO] SDK: %s\r\n", system_get_sdk_version());
+                os_printf("[INFO] Chip ID: %08X\r\n", system_get_chip_id());
+                os_printf("[INFO] BOOT Version: %d\r\n",system_get_boot_version());
+                os_printf("[INFO] BIN User addr: 0x%08X\r\n",system_get_userbin_addr());
+
+                bootmode = system_get_boot_mode();
+                if(bootmode == 0){ os_printf("[INFO] Boot using Enhance Mode\r\n"); }
+                else{os_printf("[INFO] Boot using Normal Mode\r\n");}
+
+                os_printf("[INFO] CPU Freq: %d MHz\r\n", system_get_cpu_freq());
+                os_printf("[INFO] Memory Info:\r\n"); system_print_meminfo();
+
+                os_printf("[INFO] -------------------------------------------\r\n");
+                os_printf("\r\n\r\n");
             }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);

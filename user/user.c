@@ -56,6 +56,9 @@ LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
     else if (last_wifi_mode == STATION_MODE) {
         user_wifi_station_init();
     }
+    else if (last_wifi_mode == STATIONAP_MODE) {
+        user_wifi_station_init();
+    }
 }
 
 /**
