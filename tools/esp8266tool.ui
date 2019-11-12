@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>791</width>
-      <height>251</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="title">
@@ -30,7 +30,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>210</y>
+       <y>200</y>
        <width>121</width>
        <height>27</height>
       </rect>
@@ -307,7 +307,7 @@
      <property name="geometry">
       <rect>
        <x>500</x>
-       <y>160</y>
+       <y>150</y>
        <width>281</width>
        <height>80</height>
       </rect>
@@ -392,13 +392,319 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>210</y>
+       <y>200</y>
        <width>121</width>
        <height>27</height>
       </rect>
      </property>
      <property name="text">
       <string>Upload Firmware</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="DeviceID">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>320</y>
+      <width>421</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Device ID</string>
+    </property>
+    <widget class="QLineEdit" name="txtServReq">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>291</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblServReq">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Server Request URL</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnServReq">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>40</y>
+       <width>85</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Request</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtDeviceID">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>291</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSetDevID">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>100</y>
+       <width>85</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Set DevID</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblSetDevID">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>131</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Device ID from Server</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtConfirm">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>291</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnConfirm">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>220</y>
+       <width>85</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Confirm</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblConfirm">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Device ID confirm URL</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblChkDevID">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>171</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Device ID check result </string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txtChkDevID">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>291</width>
+       <height>23</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnChkDevID">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>160</y>
+       <width>85</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Check</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="Serial">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>250</y>
+      <width>421</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Serial UART</string>
+    </property>
+    <widget class="QLabel" name="lblBaud">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Baudrate</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="cmbBaud">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>30</y>
+       <width>111</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>9600</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>19200</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>38400</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>57600</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>115200</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QPushButton" name="btnConnect">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>30</y>
+       <width>181</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Connect</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="Console">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>250</y>
+      <width>361</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Serial Console</string>
+    </property>
+    <widget class="QTextEdit" name="txtConsole">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>341</width>
+       <height>241</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnInfoJSON">
+     <property name="geometry">
+      <rect>
+       <x>94</x>
+       <y>30</y>
+       <width>81</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>JSON Info</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnRestart">
+     <property name="geometry">
+      <rect>
+       <x>184</x>
+       <y>30</y>
+       <width>81</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Restart</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnSwitch">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>30</y>
+       <width>81</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Restart</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnInfoSystem">
+     <property name="geometry">
+      <rect>
+       <x>4</x>
+       <y>30</y>
+       <width>81</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>System Info</string>
      </property>
     </widget>
    </widget>
