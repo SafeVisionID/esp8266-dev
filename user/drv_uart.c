@@ -42,6 +42,7 @@
 #include "rwflash.h"
 #include "interrupt.h"
 #include "json.h"
+#include "httpd.h"
 
 extern UartDevice UartDev;
 extern char strConfigs[FLASH_CONFIGS_LEN];
@@ -259,6 +260,8 @@ uart_response(uint8 inChar){
     char strReq[32];
     char user_id[FLASH_STRING_BUFF];
     char devs_id[FLASH_STRING_BUFF];
+    char ip_numb[8];
+    char url_req[16];
 
     char json_resp[JSON_RESP_LEN];
 
@@ -365,7 +368,10 @@ uart_response(uint8 inChar){
                 os_printf("\r\n\r\n");
             }
             else if(os_strcmp("request",strReq)==0){
-                os_printf("Client request\r\n");
+                uart_conf_parse(uart_rx_buffer,ip_numb,1);
+                os_sprintf(url_req,"http://192.168.4.%s:8000/",ip_numb);
+                os_printf("Client request at %s\r\n",url_req);
+                tcp_client_get(url_req,"");
             }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);

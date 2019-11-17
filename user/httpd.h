@@ -43,7 +43,7 @@
 /**
  * @brief Reboot after Wifi switching or not
  */
-#define SWITCH_REBOOT       1
+#define SWITCH_REBOOT 1
 
 /**
  * @brief TCP server initialization

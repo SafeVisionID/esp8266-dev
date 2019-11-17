@@ -1,6 +1,8 @@
 Makefile
 user/analog.c
 user/analog.h
+user/client.c
+user/client.h
 user/drv_gpio16.c
 user/drv_uart.c
 user/blinky.c
