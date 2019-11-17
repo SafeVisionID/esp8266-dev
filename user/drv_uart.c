@@ -374,6 +374,12 @@ uart_response(uint8 inChar){
                 os_printf("Client request at %s\r\n",url_req);
                 tcp_client_request(url_req);
             }
+            else if(os_strcmp("reqagent",strReq)==0){
+                uart_conf_parse(uart_rx_buffer,ip_numb,1);
+                os_sprintf(url_req,"http://192.168.4.%s:8000/agen",ip_numb);
+                os_printf("Client request at %s\r\n",url_req);
+                tcp_client_request(url_req);
+            }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);
             }
