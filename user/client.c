@@ -432,8 +432,17 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * post
     tcp_client_raw(hostname, port, secure, path, post_data, headers);
 }
 
-void ICACHE_FLASH_ATTR tcp_client_get(const char * url, const char * headers){
+/**
+ * @brief HTTP client GET request
+ * @param Request URL
+ * @param Data headers
+ */
+LOCAL void ICACHE_FLASH_ATTR tcp_client_get(const char * url, const char * headers){
     tcp_client_post(url, NULL, headers);
+}
+
+void ICACHE_FLASH_ATTR tcp_client_request(const char * url){
+    tcp_client_get(url,"");
 }
 
 /** @} */
