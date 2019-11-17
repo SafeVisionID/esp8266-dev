@@ -20,6 +20,8 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#define BUFFER_SIZE_MAX 5000
+
 /**
  * @brief TCP client GET request
  * @param URL request
