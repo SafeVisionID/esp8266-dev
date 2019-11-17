@@ -364,6 +364,9 @@ uart_response(uint8 inChar){
                 os_printf("[INFO] -------------------------------------------\r\n");
                 os_printf("\r\n\r\n");
             }
+            else if(os_strcmp("request",strReq)==0){
+                os_printf("Client request\r\n");
+            }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);
             }
