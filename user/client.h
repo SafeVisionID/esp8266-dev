@@ -23,10 +23,17 @@
 #define BUFFER_SIZE_MAX 5000
 
 /**
- * @brief TCP client HTTP request
- * @param URL request
+ * @brief TCP client GET request
+ * @param[in] URL request
  */
-void tcp_client_request(const char * url);
+void tcp_client_get(const char * url);
+
+/**
+ * @brief TCP client POST request
+ * @param[in] URL request
+ * @param[in] POST data to send
+ */
+void tcp_client_post(const char * url, const char *post_data);
 
 #endif // CLIENT_H
 /** @} */

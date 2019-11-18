@@ -43,6 +43,8 @@ typedef struct{
     bool secure;
 }request_args;
 
+/* Additional String Processing Routines */
+
 LOCAL char * ICACHE_FLASH_ATTR esp_strdup(const char * str){
     if(str == NULL){ return NULL;	}
 
@@ -129,9 +131,6 @@ LOCAL long ICACHE_FLASH_ATTR esp_strtol(const char *nptr, char **endptr, int bas
     return (acc);
 }
 
-/**
- * @brief Decode Chunked Characters
- */
 LOCAL int ICACHE_FLASH_ATTR chunked_decode(char * chunked, int size){
     char *src = chunked;
     char *end = chunked + size;
@@ -151,6 +150,8 @@ LOCAL int ICACHE_FLASH_ATTR chunked_decode(char * chunked, int size){
 
     return dst;
 }
+
+/* END References */
 
 /**
  * @brief TCP Client Receive Callback
@@ -309,7 +310,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_errorcb(void *arg, sint8 errType){
 }
 
 /**
- * @brief TCP Client DNS Callback
+ * @brief Main HTTP Client Callback
+ * @param URL Hostname
+ * @param Resolved Address
+ * @param Cumulative Arguments
+ * @details Not to be called directly except from HTTP request routine
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_client_http(const char * hostname, ip_addr_t * addr, void * arg){
     request_args * req = (request_args *)arg;
@@ -388,12 +393,12 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, boo
 }
 
 /**
- * @brief HTTP client POST request
+ * @brief HTTP client request
  * @param Request URL
  * @param POST data
  * @param Data headers
  */
-LOCAL void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * post_data, const char * headers){
+LOCAL void ICACHE_FLASH_ATTR tcp_client_request(const char * url, const char * post_data, const char * headers){
     char hostname[128] = "";
     int port = 80;
     bool secure = false;
@@ -432,17 +437,12 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * post
     tcp_client_raw(hostname, port, secure, path, post_data, headers);
 }
 
-/**
- * @brief HTTP client GET request
- * @param Request URL
- * @param Data headers
- */
-LOCAL void ICACHE_FLASH_ATTR tcp_client_get(const char * url, const char * headers){
-    tcp_client_post(url, NULL, headers);
+void ICACHE_FLASH_ATTR tcp_client_get(const char * url){
+    tcp_client_request(url, NULL, "");
 }
 
-void ICACHE_FLASH_ATTR tcp_client_request(const char * url){
-    tcp_client_get(url,"");
+void ICACHE_FLASH_ATTR tcp_client_post(const char * url,const char * post_data){
+    tcp_client_request(url,post_data,"");
 }
 
 /** @} */

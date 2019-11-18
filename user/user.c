@@ -35,6 +35,7 @@
 #include "wifi_sap.h"
 #include "wifi_sta.h"
 #include "interrupt.h"
+#include "client.h"
 
 /**
  * @brief Default UART BaudRate
