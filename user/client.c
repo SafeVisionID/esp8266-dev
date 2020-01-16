@@ -33,12 +33,12 @@
  * @brief HTTP Client request arguments
  */
 typedef struct{
-    char * path;
+    char *path;
     int port;
-    char * post_data;
-    char * headers;
-    char * hostname;
-    char * buffer;
+    char *post_data;
+    char *headers;
+    char *hostname;
+    char *buffer;
     int buffer_size;
     bool secure;
 }request_args;
@@ -221,7 +221,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
     espconn_regist_sentcb(conn, tcp_client_sentcb);
 
     const char *method = "GET";
-    char post_headers[32] = "";
+    char post_headers[1024] = "";
 
     if(req->post_data != NULL){
         method = "POST";
@@ -257,10 +257,13 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
  * @brief TCP Client Disconnect Callback
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_client_disconncb(void * arg){
-    os_printf("Disconnected\r\n");
+    os_printf("client disconnected\r\n");
     struct espconn *conn = (struct espconn *)arg;
 
-    if(conn == NULL){return;}
+    if(conn == NULL){
+        os_printf("Connection pointer is NULL\r\n");
+        return;
+    }
 
     if(conn->reverse != NULL){
         request_args * req = (request_args *)conn->reverse;
@@ -307,7 +310,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_disconncb(void * arg){
  * @brief TCP Client Error Callback
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_client_errorcb(void *arg, sint8 errType){
-    os_printf("Disconnected with error\r\n");
+    os_printf("disconnected with error: %d\r\n",errType);
     tcp_client_disconncb(arg);
 }
 
@@ -386,7 +389,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, boo
         os_printf("DNS resolved\r\n");
         tcp_client_http(hostname, &addr, req);
     }
-    else if(error==ESPCONN_INPROGRESS){ os_printf("DNS pending\r\n");}
+    else if(error==ESPCONN_INPROGRESS){os_printf("DNS pending\r\n");}
     else if(error==ESPCONN_ARG){os_printf("DNS argument error %s\r\n",hostname);}
     else{
         os_printf("DNS error code %d\r\n", error);
