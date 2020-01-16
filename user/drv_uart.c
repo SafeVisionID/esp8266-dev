@@ -280,7 +280,17 @@ uart_response(uint8 inChar){
             "restart "\
             "switch "\
             "sysinfo"\
+            "api_test"\
             "help";
+
+    const char json_hdr_req[] =
+            "Content-Type: application/json\r\n" \
+            "Accept: application/json\r\n";
+
+    const char json_tes_dat[] =
+            "{\n"\
+            "\"testMessage\": \"connection\"\n" \
+            "}\n";
 
     if(inChar == '\n' || inChar == '\r'){
 
@@ -379,6 +389,11 @@ uart_response(uint8 inChar){
                 os_sprintf(url_req,"http://192.168.4.%s:8000/agen",ip_numb);
                 os_printf("Client request at %s\r\n",url_req);
                 tcp_client_get(url_req);
+            }
+            else if(os_strcmp("api_test",strReq)==0){
+                os_sprintf(url_req,"http://safevision.id:6500/sensor/test");
+                os_printf("Client request at %s\r\n",url_req);
+                tcp_client_post(url_req,json_hdr_req,json_tes_dat);
             }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);

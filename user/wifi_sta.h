@@ -23,7 +23,12 @@
 /**
  * @brief Use default SSID/PASS or not
  */
-#define USE_DEFAULT_SSID_PASS 0
+#define USE_DEFAULT_SSID_PASS 1
+
+/**
+ * @brief Use SOFTAP as default
+ */
+#define USE_DEFAULT_STATION 1
 
 /**
  * @brief Wifi Station Initialization

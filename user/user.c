@@ -51,6 +51,12 @@ LOCAL void ICACHE_FLASH_ATTR run_wifi_mode(void){
 
     last_wifi_mode = wifi_get_opmode_default();
 
+#if USE_DEFAULT_SSID_PASS
+    #if USE_DEFAULT_STATION
+    last_wifi_mode = STATION_MODE;
+    #endif
+#endif
+
     if(last_wifi_mode == SOFTAP_MODE){
         user_wifi_softap_init();
     }

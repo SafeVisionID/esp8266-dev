@@ -241,6 +241,8 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
                          "\r\n",
                          method, req->path, req->hostname, req->port, req->headers, post_headers);
 
+    os_printf("Full HTTP request:\r\n%s",buf);
+
     if (req->secure)
         espconn_secure_sent(conn, (uint8_t *)buf, len);
     else
@@ -329,7 +331,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_http(const char * hostname, ip_addr_t * 
         os_free(req);
     }
     else{
-        os_printf("DNS found %s " IPSTR "\r\n", hostname, IP2STR(addr));
+        os_printf("DNS found %s as " IPSTR "\r\n", hostname, IP2STR(addr));
 
         struct espconn * conn = (struct espconn *)os_malloc(sizeof(struct espconn));
         conn->type = ESPCONN_TCP;
@@ -384,7 +386,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, boo
         os_printf("DNS resolved\r\n");
         tcp_client_http(hostname, &addr, req);
     }
-    else if(error==ESPCONN_INPROGRESS){os_printf("DNS pending\r\n");}
+    else if(error==ESPCONN_INPROGRESS){ os_printf("DNS pending\r\n");}
     else if(error==ESPCONN_ARG){os_printf("DNS argument error %s\r\n",hostname);}
     else{
         os_printf("DNS error code %d\r\n", error);
@@ -438,11 +440,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_request(const char * url, const char * p
 }
 
 void ICACHE_FLASH_ATTR tcp_client_get(const char * url){
-    tcp_client_request(url, NULL, "");
+    tcp_client_request(url, "","");
 }
 
-void ICACHE_FLASH_ATTR tcp_client_post(const char * url,const char * post_data){
-    tcp_client_request(url,post_data,"");
+void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * headers, const char * post_data){
+    tcp_client_request(url,headers,post_data);
 }
 
 /** @} */

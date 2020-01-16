@@ -31,9 +31,10 @@ void tcp_client_get(const char * url);
 /**
  * @brief TCP client POST request
  * @param[in] URL request
+ * @param[in] POST header request
  * @param[in] POST data to send
  */
-void tcp_client_post(const char * url, const char *post_data);
+void tcp_client_post(const char * url, const char * headers, const char *post_data);
 
 #endif // CLIENT_H
 /** @} */

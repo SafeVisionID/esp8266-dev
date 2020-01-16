@@ -82,7 +82,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
 #if USE_DEFAULT_SSID_PASS
     if(os_strlen(stationConf.ssid)==0){
         os_printf("Using default ssid\r\n");
-        os_strcpy(ssid,"AchmadiGamePhone");
+        os_strcpy(ssid,"AchmadiWifi");
         os_memcpy(&stationConf.ssid, ssid, 32);
     }else{
         os_printf("Using previous ssid: %s\r\n",stationConf.ssid);
@@ -90,7 +90,7 @@ LOCAL void ICACHE_FLASH_ATTR user_wifi_station_conf(void){
 
     if(os_strlen(stationConf.password)==0){
         os_printf("Using default password\r\n");
-        os_strcpy(password,"abu_musa2015");
+        os_strcpy(password,"achmadiwifi");
         os_memcpy(&stationConf.password, password, 64);
     }else{
         os_printf("Using previous password: %s\r\n",stationConf.password);
