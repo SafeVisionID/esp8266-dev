@@ -25,7 +25,7 @@ SDK_BASE	?= /opt/esp-open-sdk/sdk
 
 # esptool path and port
 ESPTOOL		?= esptool.py
-ESPPORT		?= /dev/ttyUSB1
+ESPPORT		?= /dev/ttyUSB0
 
 # minicom path and baudrate
 MINICOM		?= minicom

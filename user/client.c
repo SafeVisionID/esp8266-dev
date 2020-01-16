@@ -391,7 +391,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, boo
         os_printf("DNS resolved\r\n");
         tcp_client_http(hostname, &addr, req);
     }
-    else if(error==ESPCONN_INPROGRESS){os_printf("DNS pending\r\n");}
+    else if(error==ESPCONN_INPROGRESS){os_printf("DNS not resolved\r\n");}
     else if(error==ESPCONN_ARG){os_printf("DNS argument error %s\r\n",hostname);}
     else{
         os_printf("DNS error code %d\r\n", error);
@@ -445,7 +445,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_request(const char * url, const char * p
 }
 
 void ICACHE_FLASH_ATTR tcp_client_get(const char * url){
-    tcp_client_request(url,NULL,NULL);
+    tcp_client_request(url,"","");
 }
 
 void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * post_data, const char * headers){
