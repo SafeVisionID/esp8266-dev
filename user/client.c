@@ -197,6 +197,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_sentcb(void * arg){
         os_printf("All sent\r\n");
     }
     else {
+        os_printf("Full request body:\r\n%s\r\n",req->post_data);
         os_printf("Sending request body\r\n");
         if (req->secure)
             espconn_secure_sent(conn, (uint8_t *)req->post_data, strlen(req->post_data));
@@ -241,7 +242,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
                          "\r\n",
                          method, req->path, req->hostname, req->port, req->headers, post_headers);
 
-    os_printf("Full HTTP request:\r\n%s",buf);
+    os_printf("Full request header:\r\n%s",buf);
 
     if (req->secure)
         espconn_secure_sent(conn, (uint8_t *)buf, len);
@@ -384,6 +385,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, boo
 
     ip_addr_t addr;
     err_t error = espconn_gethostbyname((struct espconn *)req,hostname,&addr,NULL);
+    os_printf("Got host IP: " IPSTR "\r\n",IP2STR(&addr));
 
     if(error==ESPCONN_OK){
         os_printf("DNS resolved\r\n");
@@ -443,11 +445,11 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_request(const char * url, const char * p
 }
 
 void ICACHE_FLASH_ATTR tcp_client_get(const char * url){
-    tcp_client_request(url, "","");
+    tcp_client_request(url,NULL,NULL);
 }
 
-void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * headers, const char * post_data){
-    tcp_client_request(url,headers,post_data);
+void ICACHE_FLASH_ATTR tcp_client_post(const char * url, const char * post_data, const char * headers){
+    tcp_client_request(url,post_data,headers);
 }
 
 /** @} */

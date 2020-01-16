@@ -280,7 +280,6 @@ uart_response(uint8 inChar){
             "restart "\
             "switch "\
             "sysinfo"\
-            "api_get"\
             "api_test"\
             "help";
 
@@ -391,15 +390,10 @@ uart_response(uint8 inChar){
                 os_printf("Client request at %s\r\n",url_req);
                 tcp_client_get(url_req);
             }
-            else if(os_strcmp("api_get",strReq)==0){
-                os_sprintf(url_req,"http://google.com/");
-                os_printf("Client request at %s\r\n",url_req);
-                tcp_client_get(url_req);
-            }
             else if(os_strcmp("api_test",strReq)==0){
-                os_sprintf(url_req,"http://safevision.id:6500/sensor/test");
+                os_sprintf(url_req,"http://157.245.203.236:6500/sensor/test");
                 os_printf("Client request at %s\r\n",url_req);
-                tcp_client_post(url_req,json_hdr_req,json_tes_dat);
+                tcp_client_post(url_req,json_tes_dat,json_hdr_req);
             }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);
