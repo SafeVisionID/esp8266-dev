@@ -280,6 +280,7 @@ uart_response(uint8 inChar){
             "restart "\
             "switch "\
             "sysinfo"\
+            "api_get"\
             "api_test"\
             "help";
 
@@ -387,6 +388,11 @@ uart_response(uint8 inChar){
             else if(os_strcmp("reqagent",strReq)==0){
                 uart_conf_parse(uart_rx_buffer,ip_numb,1);
                 os_sprintf(url_req,"http://192.168.4.%s:8000/agen",ip_numb);
+                os_printf("Client request at %s\r\n",url_req);
+                tcp_client_get(url_req);
+            }
+            else if(os_strcmp("api_get",strReq)==0){
+                os_sprintf(url_req,"http://google.com/");
                 os_printf("Client request at %s\r\n",url_req);
                 tcp_client_get(url_req);
             }

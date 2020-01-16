@@ -10,8 +10,8 @@
 void error(const char *msg) { perror(msg); exit(0); }
 
 int main(int argc,char *argv[]){
-    int portno          = 6500;
-    char *host          = "safevision.id";
+    int portno          = 80;
+    char *host          = "google.com";
     char *message_fmt   = "GET / HTTP/1.1\r\n";
 
     struct hostent *server;
