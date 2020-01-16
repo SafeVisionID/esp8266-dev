@@ -24,7 +24,7 @@ XTENSA_TOOLS_ROOT ?= /opt/esp-open-sdk/xtensa-lx106-elf/bin
 SDK_BASE	?= /opt/esp-open-sdk/sdk
 
 # esptool path and port
-ESPTOOL		?= esptool
+ESPTOOL		?= esptool.py
 ESPPORT		?= /dev/ttyUSB0
 
 # minicom path and baudrate
