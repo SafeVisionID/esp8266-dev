@@ -194,11 +194,10 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_sentcb(void * arg){
     request_args * req = (request_args *)conn->reverse;
 
     if (req->post_data == NULL) {
-        os_printf("All sent\r\n");
+        os_printf("All http request sent\r\n");
     }
     else {
-        os_printf("Full request body:\r\n%s\r\n",req->post_data);
-        os_printf("Sending request body\r\n");
+        os_printf("ESP8266 sending request body\r\n");
         if (req->secure)
             espconn_secure_sent(conn, (uint8_t *)req->post_data, strlen(req->post_data));
         else
@@ -242,8 +241,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
                          "\r\n",
                          method, req->path, req->hostname, req->port, req->headers, post_headers);
 
-    os_printf("Full request header:\r\n%s",buf);
-
     if (req->secure)
         espconn_secure_sent(conn, (uint8_t *)buf, len);
     else
@@ -251,7 +248,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
 
     os_free(req->headers);
     req->headers = NULL;
-    os_printf("Sending request header\r\n");
+    os_printf("ESP8266 sending request header\r\n");
 }
 
 /**
