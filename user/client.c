@@ -361,6 +361,18 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_http(const char * hostname, ip_addr_t * 
 }
 
 /**
+ * @brief DNS found/resolved callback
+ * @param[in] Resolved Hostname URL
+ * @param[in] Resolved IP Address
+ * @param[in] Complete DNS resolver arguments
+ */
+LOCAL void ICACHE_FLASH_ATTR dns_found_cb(const char *hostname, ip_addr_t *ipaddr, void *arg){
+    request_args *req = (request_args *)arg;
+    os_printf("DNS resolved\r\n");
+    tcp_client_http(hostname, ipaddr, req);
+}
+
+/**
  * @brief Basic/RAW client request
  * @param[in] Hostname URL
  * @param[in] Port number
@@ -370,7 +382,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_http(const char * hostname, ip_addr_t * 
  * @param[in] Data headers
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, bool secure, const char * path, const char * post_data, const char * headers){
-    request_args * req = (request_args *)os_malloc(sizeof(request_args));
+    request_args *req = (request_args *)os_malloc(sizeof(request_args));
 
     req->hostname = esp_strdup(hostname);
     req->path = esp_strdup(path);
@@ -384,19 +396,15 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_raw(const char * hostname, int port, boo
     req->buffer[0] = '\0';
 
     ip_addr_t addr;
-    err_t error = espconn_gethostbyname((struct espconn *)req,hostname,&addr,NULL);
-    os_printf("Got host IP: " IPSTR "\r\n",IP2STR(&addr));
+    err_t error = espconn_gethostbyname((struct espconn *)req,hostname,&addr,&dns_found_cb);
 
     if(error==ESPCONN_OK){
         os_printf("DNS resolved\r\n");
         tcp_client_http(hostname, &addr, req);
     }
-    else if(error==ESPCONN_INPROGRESS){os_printf("DNS not resolved\r\n");}
+    else if(error==ESPCONN_INPROGRESS){os_printf("DNS pending\r\n");}
     else if(error==ESPCONN_ARG){os_printf("DNS argument error %s\r\n",hostname);}
-    else{
-        os_printf("DNS error code %d\r\n", error);
-        tcp_client_http(hostname, NULL, req);
-    }
+    else{os_printf("DNS error code %d\r\n", error);}
 }
 
 /**
