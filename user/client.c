@@ -154,9 +154,42 @@ LOCAL int ICACHE_FLASH_ATTR chunked_decode(char * chunked, int size){
 /* END References */
 
 /**
+ * @brief Parse received JSON from http headers
+ * @param[in] Received HTTP data
+ * @param[in] Parsed received JSON
+ */
+LOCAL void ICACHE_FLASH_ATTR json_http_parse(char *strIN, char *strOUT){
+    char strInput[2048];
+    char strOutput[2048];
+    uint16 i,j,json_part = 0;
+
+    os_strcpy(strInput,strIN);
+    for(i=0;i<=os_strlen(strInput);i++){
+        if(strInput[i]=='{'){
+            strOutput[0]='{';
+            json_part = 1;
+            j = 1;
+        }
+        else{
+            if(json_part==1){
+                strOutput[j]=strInput[i];
+                j++;
+
+                if(strInput[i]=='}'){
+                    strOutput[j]='}';
+                    strOutput[j+1]='\0';
+                }
+            }
+        }
+    }
+    os_strcpy(strOUT,strOutput);
+}
+
+/**
  * @brief TCP Client Receive Callback
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_client_revcb(void * arg, char * buf, unsigned short len){
+    char json_out[256];
     struct espconn * conn = (struct espconn *)arg;
     request_args * req = (request_args *)conn->reverse;
 
@@ -183,7 +216,9 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_revcb(void * arg, char * buf, unsigned s
     req->buffer = new_buffer;
     req->buffer_size = new_size;
 
-    os_printf("Received: %s\r\n",new_buffer);
+    json_http_parse(new_buffer,json_out);
+    os_printf("Received JSON from http:\r\n");
+    os_printf("%s\r\n",json_out);
 }
 
 /**
