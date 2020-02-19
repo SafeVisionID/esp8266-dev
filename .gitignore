@@ -4,3 +4,4 @@
 *.bck
 *.wings~
 /esp8266dev.creator.user
+/build/
