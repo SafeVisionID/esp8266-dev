@@ -263,7 +263,6 @@ uart_response(uint8 inChar){
     char devs_id[FLASH_STRING_BUFF];
     char ip_numb[8];
     char url_req[16];
-
     char json_resp[JSON_RESP_LEN];
 
     const char cmdlist[]= "commands: "\
@@ -279,8 +278,9 @@ uart_response(uint8 inChar){
             "jsoninfo "\
             "restart "\
             "switch "\
-            "sysinfo"\
-            "apitest"\
+            "sysinfo "\
+            "apitest "\
+            "apicreate" \
             "help";
 
     const char json_hdr_req[] =
@@ -291,6 +291,14 @@ uart_response(uint8 inChar){
             "{\n"\
             "\"testMessage\": \"connection\"\n" \
             "}\n";
+
+    char json_str_token[JSON_RESP_LEN];
+    char json_hdr_create[JSON_RESP_LEN];
+    os_sprintf(json_hdr_create,
+               "Content-Type: application/json\r\n" \
+               "Accept: application/json\r\n" \
+               "x-access-token={%s}\r\n"
+               ,json_str_token);
 
     if(inChar == '\n' || inChar == '\r'){
 
@@ -394,6 +402,11 @@ uart_response(uint8 inChar){
                 os_sprintf(url_req,"http://safevision.id:6500/sensor/test");
                 os_printf("HTTP request to %s\r\n",url_req);
                 tcp_client_post(url_req,json_tes_dat,json_hdr_req);
+            }
+            else if(os_strcmp("apicreate",strReq)==0){
+                os_sprintf(url_req,"http://safevision.id:6500/sensor/test");
+                os_printf("HTTP request to %s\r\n",url_req);
+                os_printf(json_hdr_create);
             }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);
