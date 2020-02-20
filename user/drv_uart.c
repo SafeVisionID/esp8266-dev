@@ -404,7 +404,7 @@ uart_response(uint8 inChar){
                 tcp_client_post(url_req,json_tes_dat,json_hdr_req);
             }
             else if(os_strcmp("apicreate",strReq)==0){
-                os_sprintf(url_req,"http://safevision.id:6500/sensor/test");
+                os_sprintf(url_req,"http://safevision.id:6500/sensor/create");
                 os_printf("HTTP request to %s\r\n",url_req);
                 os_printf(json_hdr_create);
             }

@@ -50,4 +50,81 @@ Fearture and To-Do list:
 	
 -----------------------------------------------------------------------
 
+IoT API:
+- [x] Test:
+	
+	- Debug Serial Command:
+	~~~
+	apitest
+	~~~
+	
+	- URL:
+	~~~
+	POST /sensor/test
+	~~~
+	
+	- HEADER:
+	~~~
+	"Content-Type: application/json\r\n" \
+    "Accept: application/json\r\n";
+	~~~
+	
+	- BODY:
+	~~~
+	"{\n"\
+    "\"testMessage\": \"connection\"\n" \
+    "}\n";
+	~~~
+
+	- RESPONSE:
+	~~~
+	{
+  	"message": "Connected"
+	}
+	~~~
+	
+- [ ] Create:
+	
+	- Debug Serial Command:
+	~~~
+	apicreate
+	~~~
+	
+	- URL:
+	~~~
+	POST /sensor/test
+	~~~
+	
+	- HEADER:
+	~~~
+	"Content-Type: application/json\r\n" \
+    "Accept: application/json\r\n" \
+    "x-access-token={TOKEN_STRING}\r\n" 
+	~~~
+	
+	- BODY:
+	~~~
+	"{\n" \
+	"\"id\": \"DEVICE_ID\",\n" \
+	"\"jenis\": \"alarm\",\n" \
+	"}\n";
+	~~~
+	
+	- RESPONSE:
+	~~~
+	{
+	"data": [],
+	"_id": "SNSR0001",
+	"jenis": "alarm",
+	"status": "0",
+	"username": "user2@gmail.com",
+	"long": "3423480923.21",
+	"lat": "2342830420938.22",
+	"__v": 0
+	}
+	~~~
+
+
+-----------------------------------------------------------------------
+
 Copyright (C) Wira ST MT
