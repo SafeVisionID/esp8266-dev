@@ -280,24 +280,23 @@ uart_response(uint8 inChar){
             "switch "\
             "sysinfo "\
             "apitest "\
-            "apicreate" \
+            "apivalue "\
             "help";
 
-    const char json_hdr_req[] =
-            "Content-Type: application/json\r\n" \
-            "Accept: application/json\r\n";
+    const char json_hdr_tes[] =
+            "Content-Type: application/json\r\n";
 
-    const char json_tes_dat[] =
+    const char json_body_tes[] =
             "{\n"\
             "\"testMessage\": \"connection\"\n" \
             "}\n";
 
-    char json_str_token[JSON_RESP_LEN];
-    char json_hdr_create[JSON_RESP_LEN];
-    os_sprintf(json_hdr_create,
-               "Content-Type: application/json\r\n" \
-               "Accept: application/json\r\n" \
-               "x-access-token={%s}\r\n"
+    char json_str_token[] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMWU5NmU3ZDMwNGZlNTQ3OTI4NjcwYyIsInJvbGUiOiJyZXNpZGVudCIsImlhdCI6MTU4Mzc0Njc4NywiZXhwIjoxNTgzODMzMTg3fQ.EqKkJXyQYAagnzJYJJKEdpWPX7VYfvX3vFasONh5zxw";
+
+    char json_hdr_value[512];
+    os_sprintf(json_hdr_value,
+               "Content-Type: application/x-www-form-urlencoded\r\n" \
+               "x-access-token: %s"
                ,json_str_token);
 
     if(inChar == '\n' || inChar == '\r'){
@@ -401,12 +400,12 @@ uart_response(uint8 inChar){
             else if(os_strcmp("apitest",strReq)==0){
                 os_sprintf(url_req,"http://safevision.id:6500/sensor/test");
                 os_printf("HTTP request to %s\r\n",url_req);
-                tcp_client_post(url_req,json_tes_dat,json_hdr_req);
+                tcp_client_post(url_req,json_body_tes,json_hdr_tes);
             }
-            else if(os_strcmp("apicreate",strReq)==0){
-                os_sprintf(url_req,"http://safevision.id:6500/sensor/create");
+            else if(os_strcmp("apivalue",strReq)==0){
+                os_sprintf(url_req,"http://safevision.id:6500/sensor/setById/SNS00107892945/0");
                 os_printf("HTTP request to %s\r\n",url_req);
-                os_printf(json_hdr_create);
+                tcp_client_gethdr(url_req,json_hdr_value);
             }
             else if(os_strcmp("help",strReq)==0){
                 os_printf("%s\r\n",cmdlist);

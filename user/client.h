@@ -22,9 +22,6 @@
 
 #define BUFFER_SIZE_MAX 5000
 
-#define TESTTOKEN "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkOWFiM2U3OTNiMjM4MTg0YWU3M2FhOCIsInJvbGUiOiJyZXNpZGVudCIsImlhdCI6MTU3MDQxOTc2NSwiZXhwIjoxNTcwNTA2MTY1fQ.NLmN7i3ImdnMx0HM9aruSKNeEo8OX50PsyoGibV7dAE"
-#define TESTDEVID "SNSR0001"
-
 /**
  * @brief TCP client GET request
  * @param[in] URL request
@@ -32,10 +29,17 @@
 void tcp_client_get(const char * url);
 
 /**
+ * @brief TCP client GET request
+ * @param[in] URL request
+ * @param[in] GET header request
+ */
+void tcp_client_gethdr(const char * url, const char * headers);
+
+/**
  * @brief TCP client POST request
  * @param[in] URL request
- * @param[in] POST header request
  * @param[in] POST data to send
+ * @param[in] POST header request
  */
 void tcp_client_post(const char * url, const char * post_data, const char * headers);
 

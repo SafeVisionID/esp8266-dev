@@ -31,6 +31,7 @@
 #include "httpd.h"
 #include "rwflash.h"
 #include "json.h"
+#include "blinky.h"
 
 extern char strConfigs[FLASH_CONFIGS_LEN];
 
