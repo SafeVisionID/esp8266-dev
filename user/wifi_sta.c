@@ -36,33 +36,38 @@
 LOCAL os_timer_t ip_test_timer;
 
 /**
+ * @brief ip_configured
+ */
+LOCAL uint8 ip_configured = 0;
+
+/**
  * @brief Wifi Station IP check routine
  */
 LOCAL void ICACHE_FLASH_ATTR user_wifi_station_check_ip(void){
     struct ip_info ipconfig;
+    uint8 wifi_status;
 
     os_timer_disarm(&ip_test_timer);
 
     wifi_get_ip_info(STATION_IF,&ipconfig);
 
-    if(wifi_station_get_connect_status() == STATION_GOT_IP && ipconfig.ip.addr !=0 ){
-        os_printf("got ip !!! \r\n");
-        blinky_wifi_station();
-        user_tcpserver_init(SERVER_LOCAL_PORT);
-    }else{
-        blinky_wifi_none();
+    wifi_status = wifi_station_get_connect_status();
 
-        if (wifi_station_get_connect_status() == STATION_WRONG_PASSWORD ||
-            wifi_station_get_connect_status() == STATION_NO_AP_FOUND ||
-            wifi_station_get_connect_status() == STATION_CONNECT_FAIL){
-
-            os_printf("connect fail !!! \r\n");
-        }
-        else{
-            os_timer_setfn(&ip_test_timer, (os_timer_func_t *)user_wifi_station_check_ip, NULL);
-            os_timer_arm(&ip_test_timer, 100, 0);
+    if(wifi_status == STATION_GOT_IP && ipconfig.ip.addr !=0 ){
+        if(ip_configured == 0){
+            os_printf("got ip !!! \r\n");
+            blinky_wifi_station();
+            user_tcpserver_init(SERVER_LOCAL_PORT);
+            ip_configured = 1;
         }
     }
+    else{
+        blinky_wifi_none();
+        ip_configured = 0;
+    }
+
+    os_timer_setfn(&ip_test_timer, (os_timer_func_t *)user_wifi_station_check_ip, NULL);
+    os_timer_arm(&ip_test_timer, 100, 0);
 }
 
 /**
