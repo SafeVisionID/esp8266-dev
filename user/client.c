@@ -183,6 +183,8 @@ LOCAL void ICACHE_FLASH_ATTR json_http_parse(char *strIN, char *strOUT){
         }
     }
     os_strcpy(strOUT,strOutput);
+    os_memset(strInput,0,2048);
+    os_memset(strOutput,0,2048);
 }
 
 /**
@@ -219,9 +221,9 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_revcb(void * arg, char * buf, unsigned s
     os_printf("Received http:\r\n");
     os_printf("%s\r\n\r\n",new_buffer);
 
-//    json_http_parse(new_buffer,json_out);
-//    os_printf("Received JSON from http:\r\n");
-//    os_printf("%s\r\n\r\n",json_out);
+    json_http_parse(new_buffer,json_out);
+    os_printf("Received JSON from http:\r\n");
+    os_printf("%s\r\n\r\n",json_out);
 }
 
 /**
@@ -291,7 +293,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
 
     os_free(req->headers);
     req->headers = NULL;
-
 }
 
 /**
