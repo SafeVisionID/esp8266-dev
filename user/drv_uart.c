@@ -291,12 +291,12 @@ uart_response(uint8 inChar){
             "\"testMessage\": \"connection\"\n" \
             "}\n";
 
-    char json_str_token[] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMWU5NmU3ZDMwNGZlNTQ3OTI4NjcwYyIsInJvbGUiOiJyZXNpZGVudCIsImlhdCI6MTU4Mzc0Njc4NywiZXhwIjoxNTgzODMzMTg3fQ.EqKkJXyQYAagnzJYJJKEdpWPX7VYfvX3vFasONh5zxw";
+    char json_str_token[] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlMWU5NmU3ZDMwNGZlNTQ3OTI4NjcwYyIsInJvbGUiOiJyZXNpZGVudCIsImlhdCI6MTU4MzkxMjQ2MywiZXhwIjoxNTgzOTk4ODYzfQ.B6WSr85owE11yrOJepBX19hYqLlCQP5jGl3BJvYe1-w";
 
     char json_hdr_value[512];
     os_sprintf(json_hdr_value,
                "Content-Type: application/x-www-form-urlencoded\r\n" \
-               "x-access-token: %s"
+               "x-access-token: %s\r\n"
                ,json_str_token);
 
     if(inChar == '\n' || inChar == '\r'){

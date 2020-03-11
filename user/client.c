@@ -189,7 +189,7 @@ LOCAL void ICACHE_FLASH_ATTR json_http_parse(char *strIN, char *strOUT){
  * @brief TCP Client Receive Callback
  */
 LOCAL void ICACHE_FLASH_ATTR tcp_client_revcb(void * arg, char * buf, unsigned short len){
-    char json_out[1024];
+    char json_out[2048];
     struct espconn * conn = (struct espconn *)arg;
     request_args * req = (request_args *)conn->reverse;
 
@@ -221,7 +221,7 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_revcb(void * arg, char * buf, unsigned s
 
 //    json_http_parse(new_buffer,json_out);
 //    os_printf("Received JSON from http:\r\n");
-//    os_printf("%s\r\n",json_out);
+//    os_printf("%s\r\n\r\n",json_out);
 }
 
 /**
@@ -240,6 +240,8 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_sentcb(void * arg){
             espconn_secure_sent(conn, (uint8_t *)req->post_data, strlen(req->post_data));
         else
             espconn_sent(conn, (uint8_t *)req->post_data, strlen(req->post_data));
+
+        os_printf(req->post_data);
 
         os_free(req->post_data);
         req->post_data = NULL;
@@ -284,11 +286,12 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
     else
         espconn_sent(conn, (uint8_t *)buf, len);
 
+    os_printf("ESP8266 sending request header\r\n");
     os_printf(buf);
 
     os_free(req->headers);
     req->headers = NULL;
-    os_printf("ESP8266 sending request header\r\n");
+
 }
 
 /**
