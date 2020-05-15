@@ -269,6 +269,10 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
         method = "POST";
         os_sprintf(post_headers, "Content-Length: %d\r\n", strlen(req->post_data));
     }
+    
+    if(req->headers == NULL){
+        req->headers = "";
+    }
 
     char buf[69 + strlen(method) + strlen(req->path) + strlen(req->hostname) +
                  strlen(req->headers) + strlen(post_headers)];
@@ -291,7 +295,6 @@ LOCAL void ICACHE_FLASH_ATTR tcp_client_conncb(void * arg){
     os_printf("ESP8266 sending request header\r\n");
     os_printf(buf);
 
-    os_free(req->headers);
     req->headers = NULL;
 }
 
